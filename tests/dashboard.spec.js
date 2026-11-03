@@ -47,7 +47,9 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   const best=data.routing.means.reduce((a,b)=>a.mean_perf_per_cost>b.mean_perf_per_cost?a:b);
   await expect(page.locator('#efficiency-chart .bar-row').filter({has:page.locator('.best')})).toContainText(best.method);
   await expect(page.locator('a.download, a[download], #methodology, #method-notes')).toHaveCount(0);
-  await expect(page.locator('#routing-methods h4')).toHaveCount(4);
+  await expect(page.locator('#routing-methods h4')).toHaveCount(5);
+  await expect(page.locator('#routing-methods h4').nth(1)).toHaveText('DeepSeek Only');
+  await expect(page.locator('#efficiency-chart .bar-row').nth(1)).toContainText('DeepSeek Only');
   await expect(page.locator('#routing-metrics h4')).toHaveCount(2);
   await expect(page.locator('#routing-methods')).toContainText('Training labels select the cheapest successful model');
   await expect(page.locator('.routing-dataset-panel')).toHaveCount(new Set(data.routing.metrics.map(r=>r.dataset)).size);
@@ -56,6 +58,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
     const dataset=await panel.getAttribute('data-dataset');
     const rows=data.routing.metrics.filter(r=>r.dataset===dataset);
     await expect(panel.locator('tbody tr')).toHaveCount(rows.length);
+    await expect(panel.locator('tbody tr').nth(1)).toContainText('DeepSeek Only');
     await expect(panel.locator('th')).toHaveCount(6);
     await expect(panel.locator('thead')).not.toContainText('Norm. cost');
     await expect(panel.locator('thead')).toContainText('Solver, USD');

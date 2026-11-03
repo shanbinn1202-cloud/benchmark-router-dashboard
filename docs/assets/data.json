@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T13:19:36.180931+00:00",
+  "updated_at": "2026-11-03T13:21:47.492872+00:00",
   "models": [
     {
       "id": "qwen",
@@ -2321,6 +2321,158 @@
         "cost_basis": "raw_total_usd_per_task"
       },
       {
+        "method": "DeepSeek Only",
+        "dataset": "aethercode",
+        "tasks": 400,
+        "passed": 103,
+        "performance": 0.2575,
+        "perf_per_cost": 19.414260452859303,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "5.30537850",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "5.30537850",
+        "metric_cost": "0.01326344625",
+        "classification_correct": 90,
+        "classification_accuracy": 0.225,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "bigcodebench_hard",
+        "tasks": 148,
+        "passed": 50,
+        "performance": 0.33783783783783783,
+        "perf_per_cost": 706.3164467197251,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "0.07078980",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "0.07078980",
+        "metric_cost": "0.0004783094594594594594594594595",
+        "classification_correct": 29,
+        "classification_accuracy": 0.19594594594594594,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "ds1000",
+        "tasks": 1000,
+        "passed": 571,
+        "performance": 0.571,
+        "perf_per_cost": 6708.930815907503,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "0.085110432",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "0.085110432",
+        "metric_cost": "0.000085110432",
+        "classification_correct": 541,
+        "classification_accuracy": 0.541,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "kernelbench",
+        "tasks": 270,
+        "passed": 109,
+        "performance": 0.40370370370370373,
+        "perf_per_cost": 311.8025705942188,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "0.349580184",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "0.349580184",
+        "metric_cost": "0.001294741422222222222222222222",
+        "classification_correct": 72,
+        "classification_accuracy": 0.26666666666666666,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "scicode_background",
+        "tasks": 64,
+        "passed": 32,
+        "performance": 0.5,
+        "perf_per_cost": 213.83793954956482,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "0.149646036",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "0.149646036",
+        "metric_cost": "0.0023382193125",
+        "classification_correct": 36,
+        "classification_accuracy": 0.5625,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "science",
+        "tasks": 96,
+        "passed": 11,
+        "performance": 0.11458333333333333,
+        "perf_per_cost": 0.4267277729668357,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "25.7775581924799999995",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "25.7775581924799999995",
+        "metric_cost": "0.2685162311716666666614583333",
+        "classification_correct": 60,
+        "classification_accuracy": 0.625,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "terminal",
+        "tasks": 89,
+        "passed": 54,
+        "performance": 0.6067415730337079,
+        "perf_per_cost": 1.2965908975015212,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "41.64767784816",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "41.64767784816",
+        "metric_cost": "0.4679514364961797752808988764",
+        "classification_correct": 70,
+        "classification_accuracy": 0.7865168539325843,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "verilogeval",
+        "tasks": 156,
+        "passed": 123,
+        "performance": 0.7884615384615384,
+        "perf_per_cost": 5555.233382129058,
+        "perf_per_cost_status": "finite",
+        "macro_f1": null,
+        "micro_f1": null,
+        "weighted_f1": null,
+        "raw_backend_cost_usd": "0.022141284",
+        "raw_router_cost_usd": "0",
+        "raw_total_cost_usd": "0.022141284",
+        "metric_cost": "0.0001419313076923076923076923077",
+        "classification_correct": 32,
+        "classification_accuracy": 0.20512820512820512,
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
         "method": "KNN",
         "dataset": "aethercode",
         "tasks": 400,
@@ -2799,6 +2951,26 @@
         "cost_basis": "raw_total_usd_per_task"
       },
       {
+        "method": "DeepSeek Only",
+        "datasets": 8,
+        "mean_perf_per_cost": 1.3062562104002309,
+        "mean_perf_per_cost_status": "finite",
+        "mean_classification_accuracy": 0.42596970895917524,
+        "dataset_weights": {
+          "aethercode": "0.00160633486796875",
+          "bigcodebench_hard": "0.00009160687394425675675675675676",
+          "ds1000": "0.00003741907709375",
+          "kernelbench": "0.000277626730787037037037037037",
+          "scicode_background": "0.00097216172900390625",
+          "science": "0.1726985707120703124998372396",
+          "verilogeval": "0.00007205488461538461538461538461",
+          "terminal": "0.1472308651485814606741573034"
+        },
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Classification accuracy is an unweighted dataset mean.",
+        "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
+        "cost_basis": "raw_total_usd_per_task"
+      },
+      {
         "method": "KNN",
         "datasets": 8,
         "mean_perf_per_cost": 2.8377876292955713,
@@ -3051,6 +3223,54 @@
         "dataset": "terminal",
         "model": "muse",
         "count": 26
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "aethercode",
+        "model": "deepseek",
+        "count": 400
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "bigcodebench_hard",
+        "model": "deepseek",
+        "count": 148
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "ds1000",
+        "model": "deepseek",
+        "count": 1000
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "kernelbench",
+        "model": "deepseek",
+        "count": 270
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "scicode_background",
+        "model": "deepseek",
+        "count": 64
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "science",
+        "model": "deepseek",
+        "count": 96
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "verilogeval",
+        "model": "deepseek",
+        "count": 156
+      },
+      {
+        "method": "DeepSeek Only",
+        "dataset": "terminal",
+        "model": "deepseek",
+        "count": 89
       },
       {
         "method": "KNN",

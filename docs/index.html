@@ -7,7 +7,7 @@
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css?v=20261103-visible-tables">
-  <script src="assets/app.js?v=20261103-adapted-agent" defer></script>
+  <script src="assets/app.js?v=20261103-deepseek-only" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -33,6 +33,7 @@
       <h3 id="routing-methods-title">Routing methods</h3>
       <div class="routing-guide" id="routing-methods">
       <div><h4>Random</h4><p>Selects one of the four candidate models uniformly at random for each task.</p></div>
+      <div><h4>DeepSeek Only</h4><p>Always selects DeepSeek. Uses the same task outcomes and solver costs, with no routing API cost.</p></div>
       <div><h4>KNN</h4><p>Predicts a model from neighboring task embeddings, trained jointly across datasets with grouped five-fold evaluation. Training labels select the cheapest successful model, or the cheapest model if all fail.</p></div>
       <div><h4>Zero-shot LLM</h4><p>Receives the full task prompt, available task metadata (dimension, difficulty, language and evaluation method), candidate model descriptions, and input/output token prices expressed on the dataset’s normalized cost scale. It selects a model without examples, task answers or correctness labels.</p></div>
       <div><h4>Agent-as-a-Router</h4><p>Combines task and candidate information with training-fold performance memory and exploration. Memory is updated with the selected model’s benchmark score after each task group, so this is an online feedback evaluation.</p></div>
