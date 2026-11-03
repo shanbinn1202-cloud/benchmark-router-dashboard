@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T13:27:28.307492+00:00",
+  "updated_at": "2026-11-03T13:46:14.768337+00:00",
   "models": [
     {
       "id": "qwen",
@@ -2782,112 +2782,112 @@
         "tasks": 400,
         "passed": 120,
         "performance": 0.3,
-        "perf_per_cost": 168.17025826018676,
+        "perf_per_cost": 134.3264048143277,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "0.71356256",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "0.71356256",
-        "metric_cost": "0.0017839064",
-        "classification_correct": 274,
-        "classification_accuracy": 0.685,
+        "macro_f1": 0.2054702063379829,
+        "micro_f1": 0.665,
+        "weighted_f1": 0.55320113132352,
+        "raw_backend_cost_usd": "0.861155300",
+        "raw_router_cost_usd": "0.03219102432",
+        "raw_total_cost_usd": "0.89334632432",
+        "metric_cost": "0.0022333658108",
+        "classification_correct": 266,
+        "classification_accuracy": 0.665,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "bigcodebench_hard",
         "tasks": 148,
-        "passed": 44,
-        "performance": 0.2972972972972973,
-        "perf_per_cost": 1239.447792205451,
+        "passed": 50,
+        "performance": 0.33783783783783783,
+        "perf_per_cost": 575.1077961464238,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "0.03549968",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "0.03549968",
-        "metric_cost": "0.0002398627027027027027027027027",
-        "classification_correct": 110,
-        "classification_accuracy": 0.7432432432432432,
+        "macro_f1": 0.09242618741976893,
+        "micro_f1": 0.19594594594594594,
+        "weighted_f1": 0.10124726780695972,
+        "raw_backend_cost_usd": "0.075279395",
+        "raw_router_cost_usd": "0.01166082792",
+        "raw_total_cost_usd": "0.08694022292",
+        "metric_cost": "0.0005874339386486486486486486486",
+        "classification_correct": 29,
+        "classification_accuracy": 0.19594594594594594,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "ds1000",
         "tasks": 1000,
-        "passed": 562,
-        "performance": 0.562,
-        "perf_per_cost": 6480.70951084481,
+        "passed": 566,
+        "performance": 0.566,
+        "perf_per_cost": 3613.001168127706,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "0.086718900",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "0.086718900",
-        "metric_cost": "0.0000867189",
-        "classification_correct": 500,
-        "classification_accuracy": 0.5,
+        "macro_f1": 0.2025107714762887,
+        "micro_f1": 0.53,
+        "weighted_f1": 0.38522801846939775,
+        "raw_backend_cost_usd": "0.098909501",
+        "raw_router_cost_usd": "0.05774696648",
+        "raw_total_cost_usd": "0.15665646748",
+        "metric_cost": "0.00015665646748",
+        "classification_correct": 530,
+        "classification_accuracy": 0.53,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "kernelbench",
         "tasks": 270,
-        "passed": 90,
-        "performance": 0.3333333333333333,
-        "perf_per_cost": 461.27806415742333,
+        "passed": 139,
+        "performance": 0.5148148148148148,
+        "perf_per_cost": 320.43662752776055,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "0.19511008",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "0.19511008",
-        "metric_cost": "0.0007226299259259259259259259259",
-        "classification_correct": 155,
-        "classification_accuracy": 0.5740740740740741,
+        "macro_f1": 0.0826947772462357,
+        "micro_f1": 0.15555555555555556,
+        "weighted_f1": 0.06680652965738271,
+        "raw_backend_cost_usd": "0.412136186",
+        "raw_router_cost_usd": "0.02164693384",
+        "raw_total_cost_usd": "0.43378311984",
+        "metric_cost": "0.001606604147555555555555555556",
+        "classification_correct": 42,
+        "classification_accuracy": 0.15555555555555556,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "scicode_background",
         "tasks": 64,
-        "passed": 32,
-        "performance": 0.5,
-        "perf_per_cost": 213.83793954956482,
+        "passed": 36,
+        "performance": 0.5625,
+        "perf_per_cost": 164.8580817389911,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "0.149646036",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "0.149646036",
-        "metric_cost": "0.0023382193125",
-        "classification_correct": 36,
-        "classification_accuracy": 0.5625,
+        "macro_f1": 0.16355421686746988,
+        "micro_f1": 0.390625,
+        "weighted_f1": 0.2640813253012048,
+        "raw_backend_cost_usd": "0.213280610",
+        "raw_router_cost_usd": "0.00508903024",
+        "raw_total_cost_usd": "0.21836964024",
+        "metric_cost": "0.00341202562875",
+        "classification_correct": 25,
+        "classification_accuracy": 0.390625,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "science",
         "tasks": 96,
-        "passed": 11,
-        "performance": 0.11458333333333333,
-        "perf_per_cost": 0.4267277729668357,
+        "passed": 14,
+        "performance": 0.14583333333333334,
+        "perf_per_cost": 0.1548795656040216,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "25.7775581924799999995",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "25.7775581924799999995",
-        "metric_cost": "0.2685162311716666666614583333",
-        "classification_correct": 60,
-        "classification_accuracy": 0.625,
+        "macro_f1": 0.1893939393939394,
+        "micro_f1": 0.4479166666666667,
+        "weighted_f1": 0.42234848484848486,
+        "raw_backend_cost_usd": "90.38489917248",
+        "raw_router_cost_usd": "0.00791633808",
+        "raw_total_cost_usd": "90.39281551056",
+        "metric_cost": "0.941591828235",
+        "classification_correct": 43,
+        "classification_accuracy": 0.4479166666666667,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2896,36 +2896,36 @@
         "tasks": 89,
         "passed": 54,
         "performance": 0.6067415730337079,
-        "perf_per_cost": 1.2965908975015212,
+        "perf_per_cost": 1.293593217477411,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "41.64767784816",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "41.64767784816",
-        "metric_cost": "0.4679514364961797752808988764",
-        "classification_correct": 70,
-        "classification_accuracy": 0.7865168539325843,
+        "macro_f1": 0.21794871794871795,
+        "micro_f1": 0.7640449438202247,
+        "weighted_f1": 0.6856813598386633,
+        "raw_backend_cost_usd": "41.73704834144",
+        "raw_router_cost_usd": "0.00714084448",
+        "raw_total_cost_usd": "41.74418918592",
+        "metric_cost": "0.4690358335496629213483146067",
+        "classification_correct": 68,
+        "classification_accuracy": 0.7640449438202247,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "verilogeval",
         "tasks": 156,
-        "passed": 120,
-        "performance": 0.7692307692307693,
-        "perf_per_cost": 5250.703594281634,
+        "passed": 122,
+        "performance": 0.782051282051282,
+        "perf_per_cost": 3211.7139467534557,
         "perf_per_cost_status": "finite",
-        "macro_f1": null,
-        "micro_f1": null,
-        "weighted_f1": null,
-        "raw_backend_cost_usd": "0.02285408",
-        "raw_router_cost_usd": "0",
-        "raw_total_cost_usd": "0.02285408",
-        "metric_cost": "0.0001465005128205128205128205128",
-        "classification_correct": 119,
-        "classification_accuracy": 0.7628205128205128,
+        "macro_f1": 0.09216654247391953,
+        "micro_f1": 0.20512820512820512,
+        "weighted_f1": 0.08476632656960527,
+        "raw_backend_cost_usd": "0.025476264",
+        "raw_router_cost_usd": "0.01250968432",
+        "raw_total_cost_usd": "0.03798594832",
+        "metric_cost": "0.0002434996687179487179487179487",
+        "classification_correct": 32,
+        "classification_accuracy": 0.20512820512820512,
         "cost_basis": "raw_total_usd_per_task"
       }
     ],
@@ -3013,9 +3013,9 @@
       {
         "method": "Agent-as-a-Router",
         "datasets": 8,
-        "mean_perf_per_cost": 1.6050623557361272,
+        "mean_perf_per_cost": 1.1015066815094636,
         "mean_perf_per_cost_status": "finite",
-        "mean_classification_accuracy": 0.6548943355088018,
+        "mean_classification_accuracy": 0.41927703963957474,
         "dataset_weights": {
           "aethercode": "0.00160633486796875",
           "bigcodebench_hard": "0.00009160687394425675675675675676",
@@ -3496,65 +3496,192 @@
       },
       {
         "method": "Agent-as-a-Router",
-        "dataset": "aethercode",
-        "model": "gemma",
-        "count": 400
-      },
-      {
-        "method": "Agent-as-a-Router",
-        "dataset": "bigcodebench_hard",
-        "model": "gemma",
-        "count": 148
-      },
-      {
-        "method": "Agent-as-a-Router",
-        "dataset": "ds1000",
-        "model": "gemma",
-        "count": 229
-      },
-      {
-        "method": "Agent-as-a-Router",
         "dataset": "ds1000",
         "model": "deepseek",
-        "count": 771
+        "count": 967
       },
       {
         "method": "Agent-as-a-Router",
-        "dataset": "kernelbench",
+        "dataset": "ds1000",
+        "model": "muse",
+        "count": 14
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "aethercode",
         "model": "gemma",
-        "count": 270
+        "count": 388
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "scicode_background",
-        "model": "deepseek",
-        "count": 64
-      },
-      {
-        "method": "Agent-as-a-Router",
-        "dataset": "science",
-        "model": "deepseek",
-        "count": 96
+        "model": "gemma",
+        "count": 59
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "terminal",
         "model": "deepseek",
-        "count": 89
+        "count": 86
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "bigcodebench_hard",
+        "model": "qwen",
+        "count": 5
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "terminal",
+        "model": "gemma",
+        "count": 2
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "bigcodebench_hard",
+        "model": "deepseek",
+        "count": 135
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "verilogeval",
+        "model": "deepseek",
+        "count": 144
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "kernelbench",
+        "model": "muse",
+        "count": 258
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "aethercode",
+        "model": "deepseek",
+        "count": 4
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "science",
+        "model": "deepseek",
+        "count": 66
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "bigcodebench_hard",
+        "model": "gemma",
+        "count": 4
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "science",
+        "model": "qwen",
+        "count": 16
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "ds1000",
+        "model": "gemma",
+        "count": 7
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "kernelbench",
+        "model": "qwen",
+        "count": 3
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "scicode_background",
+        "model": "muse",
+        "count": 1
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "ds1000",
+        "model": "qwen",
+        "count": 12
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "bigcodebench_hard",
+        "model": "muse",
+        "count": 4
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "science",
+        "model": "muse",
+        "count": 13
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "aethercode",
+        "model": "muse",
+        "count": 4
       },
       {
         "method": "Agent-as-a-Router",
         "dataset": "verilogeval",
         "model": "gemma",
-        "count": 156
+        "count": 3
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "kernelbench",
+        "model": "deepseek",
+        "count": 6
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "verilogeval",
+        "model": "muse",
+        "count": 5
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "scicode_background",
+        "model": "deepseek",
+        "count": 4
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "verilogeval",
+        "model": "qwen",
+        "count": 4
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "kernelbench",
+        "model": "gemma",
+        "count": 3
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "terminal",
+        "model": "muse",
+        "count": 1
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "aethercode",
+        "model": "qwen",
+        "count": 4
+      },
+      {
+        "method": "Agent-as-a-Router",
+        "dataset": "science",
+        "model": "gemma",
+        "count": 1
       }
     ],
     "aggregation_version": "raw_usd_mean_cost_weighted_v1",
-    "agent_workers": 0,
-    "agent_variant": "github_id_hierarchical_nested_adapted",
+    "agent_workers": 32,
+    "agent_router_model": "deepseek/deepseek-v4.1-flash-1017",
+    "agent_variant": "online_llm_tools_memory_replay",
     "zero_shot_variant": "github_zero_shot_deepseek_public_cards",
     "zero_shot_router_model": "deepseek/deepseek-v4.1-flash-1017",
-    "agent_policy_note": "GitHub hierarchical core adapted with public query-topic/domain groups, nested grouped three-fold validation inside each of five outer folds, training-only smoothing/support/target selection. No test feedback or router LLM calls.",
+    "agent_policy_note": "DeepSeek LLM selects a candidate using training-fold capability profiles and memory. The selected saved output and native score are retrieved after routing; original syntax, visible-example and heuristic tools plus observe() execute in an isolated container. Thirty-two independent causal streams; related-family feedback barrier. Native solver results are replayed, not regenerated.",
     "dataset_mean_trajectory_cost_usd": {
       "aethercode": "0.01285067894375",
       "bigcodebench_hard": "0.0007328549915540540540540540541",
@@ -3610,7 +3737,7 @@
     "tokens": "Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. For interrupted Terminal-Bench requests, input is reconstructed with the model tokenizer and output uses only saved token counts, as authorized by the user. Unavailable output is excluded, not estimated. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.",
     "routing": "Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Classification accuracy is an unweighted dataset mean.",
     "labels": "The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.",
-    "methods": "KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot: GitHub-adapted LLM router. Agent: GitHub hierarchical core adapted with public query-topic/domain groups, nested grouped three-fold validation inside each of five outer folds, training-only smoothing/support/target selection. No test feedback or router LLM calls.",
-    "comparison": "Solver harnesses, context limits and providers vary across runs. Routers use the same existing task-model outcomes. GitHub default ID Agent uses training folds only; its main-policy adaptation is distinct from the online LLM Agent and OOD verifier cascade."
+    "methods": "KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot: GitHub-adapted LLM router. Agent: DeepSeek LLM selects a candidate using training-fold capability profiles and memory. The selected saved output and native score are retrieved after routing; original syntax, visible-example and heuristic tools plus observe() execute in an isolated container. Thirty-two independent causal streams; related-family feedback barrier. Native solver results are replayed, not regenerated.",
+    "comparison": "Solver harnesses, contexts and providers vary. Online Agent replays only the selected model score after routing, runs local tools in isolation and updates causal stream memory. This feedback protocol differs from static KNN and zero-shot; no new solver generation is performed."
   }
 }

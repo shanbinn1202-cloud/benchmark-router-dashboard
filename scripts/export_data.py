@@ -316,6 +316,7 @@ def routing_data(stage, summary, cohort=None):
             'metrics': metrics, 'means': means, 'choices': choices,
             'aggregation_version': aggregation,
             'agent_workers': summary.get('agent_workers',256),
+            'agent_router_model': summary.get('agent_router_model'),
             'agent_variant': summary.get('agent_variant','github_online_batched'),
             'zero_shot_variant': summary.get('zero_shot_variant','github_previous'),
             'zero_shot_router_model': summary.get('zero_shot_router_model','deepseek/deepseek-v4.1-flash-1017'),
@@ -415,7 +416,7 @@ def build():
             'routing': ('Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Classification accuracy is an unweighted dataset mean.' if routed['aggregation_version'] == 'raw_usd_mean_cost_weighted_v1' else 'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Classification accuracy measures exact matches to best-model labels. Overall metrics are unweighted means across datasets.'),
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
             'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot: GitHub-adapted LLM router. Agent: '+routed.get('agent_policy_note','GitHub online adaptation.'),
-            'comparison':'Solver harnesses, context limits and providers vary across runs. Routers use the same existing task-model outcomes. GitHub default ID Agent uses training folds only; its main-policy adaptation is distinct from the online LLM Agent and OOD verifier cascade.'}}
+            'comparison':('Solver harnesses, contexts and providers vary. Online Agent replays only the selected model score after routing, runs local tools in isolation and updates causal stream memory. This feedback protocol differs from static KNN and zero-shot; no new solver generation is performed.' if routed.get('agent_variant')=='online_llm_tools_memory_replay' else 'Solver harnesses, context limits and providers vary across runs. Routers use the same existing task-model outcomes. The adapted hierarchical ID policy differs from the online LLM Agent.')}}
 
     cache.db.commit(); cache.db.close()
     dest=HERE/'docs/assets';dest.mkdir(parents=True,exist_ok=True)
