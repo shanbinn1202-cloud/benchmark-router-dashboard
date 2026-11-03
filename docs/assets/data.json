@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T09:06:57.670814+00:00",
+  "updated_at": "2026-11-03T09:13:16.467629+00:00",
   "models": [
     {
       "id": "qwen",
@@ -2674,13 +2674,13 @@
     }
   },
   "notes": {
-    "accuracy": "准确率 = 通过题数 ÷ 已评分题数。运行中或缺少有效评分的题不算失败；用户指定的终端死锁、客户端超时和评分超时计为失败。",
-    "cost": "USD；仅选定正式尝试。云端使用实际账单，本地按原供应商冻结单价模拟 API 费用。包括该尝试内已计费重试，不累计被替换的旧尝试。",
-    "normalization": "每个数据集对当前视图中已评分且费用完整的 task × model 费用做 min–max，范围为 [0,1]；表格展示每题均值。共同样本视图严格复用 routing 的冻结尺度；全部正式结果视图独立计算，不能混用。",
-    "tokens": "每题累计所有模型调用的输入、输出 token，再对 token 记录完整的已评分题取均值；包含重复输入和可核对的已计费重试。不是上下文窗口长度。缺失用 — 表示。",
-    "routing": "Perf/Cost = 完成率 ÷ 每题平均归一化总费用；总费用包含解题和路由决策。Macro-F1 使用固定四个模型标签。总览对各数据集直接等权平均。",
-    "labels": "Best model：做对的模型中原始费用最低者；全错则选所有模型中最便宜者。同价按模型别名字典序。",
-    "methods": "KNN 在全部数据集上合并训练，使用全局分组五折。Zero-shot 与 Agent 使用 GitHub 适配版；Agent 使用训练折记忆与按组延迟的所选模型评分反馈。",
-    "comparison": "候选模型的 agent、上下文和供应商存在已授权差异；这里比较现有完整实验流程。Agent 含评测反馈，不等同于无评分反馈的部署或论文完整复现。"
+    "accuracy": "Passed / graded tasks. Running or ungraded tasks are excluded. Terminal deadlocks, client timeouts and verifier timeouts count as failures under the experiment policy.",
+    "cost": "USD for the selected formal attempt, including billed retries. API runs use actual charges; local runs use frozen provider rates. Replaced attempts are excluded.",
+    "normalization": "c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.",
+    "tokens": "Total tokens across all calls per task, averaged over graded tasks with complete usage records. Includes repeated inputs and verified billed retries.",
+    "routing": "Perf/Cost = accuracy / mean normalized total cost, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.",
+    "labels": "The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.",
+    "methods": "KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.",
+    "comparison": "Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction."
   }
 }
