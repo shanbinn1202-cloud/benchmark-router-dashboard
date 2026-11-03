@@ -263,6 +263,18 @@ def routing_data(stage, summary, cohort=None):
                 reporting_module_sha256=hashlib.sha256((BASE/'all_datasets/cost_aggregation.py').read_bytes()).hexdigest())
             temporary = final_path.with_suffix('.reporting.tmp')
             temporary.write_text(json.dumps(original,indent=2)+'\n'); temporary.replace(final_path)
+        knn_path=stage/'knn-metrics.json'
+        knn_mean=next((m for m in means if m['method']=='KNN'),None)
+        if knn_path.exists() and knn_mean:
+            knn_report=read(knn_path)
+            knn_report.update(dataset_arithmetic_mean=knn_mean,aggregation_version=aggregation)
+            knn_path.write_text(json.dumps(knn_report,indent=2)+'\n')
+        status_path=BASE/'all_datasets/raw_usd_20261103/status.json'
+        if status_path.exists():
+            status_report=read(status_path)
+            if status_report.get('status')=='COMPLETED' and status_report.get('output')==str(stage):
+                status_report.update(means=means,aggregation_version=aggregation)
+                status_path.write_text(json.dumps(status_report,indent=2)+'\n')
         random_path=stage/'random/summary.json'
         if random_path.exists():
             random_summary=read(random_path)
