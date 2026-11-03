@@ -117,7 +117,7 @@ function renderModels() {
 
 function routeSummary() {
   const ds=$('#routing-dataset').value;
-  return methods.map(method=>{
+  return methods.filter(method=>data.routing.means.some(r=>r.method===method)).map(method=>{
     if(ds==='all') {
       const r=data.routing.means.find(r=>r.method===method);
       return {method,perf:r?.mean_perf_per_cost,f1:r?.mean_macro_f1,datasets:r?.datasets};
@@ -133,6 +133,8 @@ function bars(target, rows, key, max) {
 }
 
 function renderRouting() {
+  const status=data.routing.method_status||[];
+  $('#routing-progress').textContent=status.filter(s=>s.status!=='COMPLETED').map(s=>`${s.method}: ${integer(s.completed)}/${integer(s.total)} · running`).join(' · ');
   const weighted=data.routing.aggregation_version==='raw_usd_range_weighted_v1';
   if(weighted) {
     const methodsText=$('#routing-methods').querySelectorAll('p');
@@ -155,7 +157,7 @@ function renderRouting() {
   }).join('');
   bindSort('[data-route-sort]','routeSort',()=>routeSort,v=>routeSort=v,renderRouting);
   $('#legend').innerHTML=data.models.map(m=>`<span><i class="model-dot" style="background:${colors[m.id]}"></i>${esc(m.id==='deepseek'?'DeepSeek':m.id[0].toUpperCase()+m.id.slice(1))}</span>`).join('');
-  $('#selection-chart').innerHTML=methods.map(method=>{
+  $('#selection-chart').innerHTML=methods.filter(method=>data.routing.means.some(r=>r.method===method)).map(method=>{
     const choices=data.routing.choices.filter(r=>r.method===method&&(equal||r.dataset===ds));
     const total=sum(choices,'count');
     return `<div class="selection-row"><span>${esc(method)}</span><div class="selection-stack">${data.models.map(m=>{

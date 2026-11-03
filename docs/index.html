@@ -7,7 +7,7 @@
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css?v=20261103-visible-tables">
-  <script src="assets/app.js?v=20261103-weighted-routing" defer></script>
+  <script src="assets/app.js?v=20261103-progressive-routing" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -45,6 +45,7 @@
       <div><h4>Macro-F1</h4><p>Compares routing choices against each task’s ground-truth label: the cheapest successful model, or the cheapest model if all fail (cost ties use alphabetical model aliases). F1 is averaged equally over the four model labels; both headline metrics are then averaged equally across datasets.</p></div>
       </div>
     </section>
+    <p id="routing-progress" class="section-note"></p>
     <div class="routing-topline"><span id="routing-coverage"></span><label class="sr-only" for="routing-dataset">Routing dataset</label><select id="routing-dataset"></select></div>
     <div class="chart-grid">
       <div class="panel chart-panel"><div class="chart-heading"><h3>Perf / Cost</h3><span>Higher is better</span></div><div id="efficiency-chart" class="bar-chart"></div></div>

@@ -11,7 +11,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
     await expect(panel.locator('table')).toBeVisible();
   }
   expect(await page.locator('.selection-panel').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('#routing-tables')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBeTruthy();
-  await expect(page.locator('#efficiency-chart .bar-row')).toHaveCount(4);
+  await expect(page.locator('#efficiency-chart .bar-row')).toHaveCount(data.routing.means.length);
   await expect(page.locator('#routing-tables tbody tr')).toHaveCount(data.routing.metrics.length);
   await expect(page.locator('#error')).toBeHidden();
   await expect(page.locator('html')).toHaveAttribute('lang','en');
@@ -40,7 +40,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
     expect(parseFloat(accuracy[0])).toBeGreaterThanOrEqual(parseFloat(accuracy.at(-1)));
   }
   await page.locator('#routing-dataset').selectOption('ds1000');
-  await expect(page.locator('#routing-tables tbody tr')).toHaveCount(4);
+  await expect(page.locator('#routing-tables tbody tr')).toHaveCount(data.routing.metrics.filter(r=>r.dataset==='ds1000').length);
   const dsTasks=data.routing.metrics.find(r=>r.dataset==='ds1000').tasks.toLocaleString('en-US');
   for(const row of await page.locator('.selection-row').allTextContents())expect(row).toContain(dsTasks);
   await page.locator('#routing-dataset').selectOption('all');
@@ -124,6 +124,6 @@ test('range-weighted routing describes raw costs and batched feedback',async({pa
   await expect(page.locator('#routing-metrics')).toContainText('not its inverse');
   await expect(page.locator('#routing-metrics')).toContainText('unweighted arithmetic mean');
   await expect(page.locator('#routing-methods')).toContainText('raw USD prices');
-  await expect(page.locator('#routing-methods')).toContainText('256 requests');
+  await expect(page.locator('#routing-methods')).toContainText(`${data.routing.agent_workers??256} requests`);
   await expect(page.locator('.routing-dataset-panel').first()).toContainText('weight');
 });

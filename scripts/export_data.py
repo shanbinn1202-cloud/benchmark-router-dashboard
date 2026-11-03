@@ -262,7 +262,12 @@ def routing_data(stage, summary):
             continue
         counts = Counter((r['dataset'], r['selected_model']) for r in lines(p))
         choices.extend({'method':method,'dataset':ds,'model':model,'count':n} for (ds,model),n in counts.items())
-    return {'tasks': summary['tasks'], 'finished': summary['finished'], 'coverage':summary['coverage'],
+    if summary.get('_route_paths'):
+        choices=[]
+        for method, path in summary['_route_paths'].items():
+            counts=Counter((r['dataset'],r['selected_model']) for r in lines(path))
+            choices.extend({'method':method,'dataset':ds,'model':model,'count':n} for (ds,model),n in counts.items())
+    return {'method_status':summary.get('method_status',[]),'tasks': summary['tasks'], 'finished': summary['finished'], 'coverage':summary['coverage'],
             'metrics': metrics, 'means': means, 'choices': choices,
             'aggregation_version': aggregation,
             'agent_workers': summary.get('agent_workers',256),
@@ -277,11 +282,57 @@ def save_csv(path, rows):
         writer.writeheader(); writer.writerows(rows)
 
 
+def partial_routing(stage):
+    """Publish completed methods on the new cohort; never splice in old decisions."""
+    manifest, tasks = historical.load_snapshot(stage / 'cohort')
+    raw = load_module('dashboard_raw_routing_metrics', BASE/'all_datasets/raw_usd_20261103/raw_metrics.py')
+    specs = [('Random','random','summary.json'), ('KNN','offline/KNN','../validation.json'),
+             ('Zero-shot LLM','zero_shot','validation.json'), ('Agent-as-a-Router','agent32_stage/agent','validation.json')]
+    metrics, means, paths, statuses = [], [], {}, []
+    for method, relative, proof_name in specs:
+        folder = stage/relative
+        proof = read(folder/proof_name) if (folder/proof_name).exists() else {}
+        routes = folder/'routes.jsonl'
+        complete = proof.get('status') in ('PASS','COMPLETED') and routes.exists()
+        if not complete:
+            statuses.append({'method':method,'status':'RUNNING',
+                'completed':len(list((folder/'decisions').glob('*.json'))), 'total':len(tasks)})
+            continue
+        identity = read(folder/'summary.json') if (folder/'summary.json').exists() else proof
+        if identity.get('snapshot_sha256') != manifest['tasks_sha256']:
+            raise ValueError('Completed method uses another cohort: '+method)
+        expected = identity.get('routes_sha256')
+        if isinstance(expected, dict): expected = expected.get(method)
+        if expected and hashlib.sha256(routes.read_bytes()).hexdigest() != expected:
+            raise ValueError('Route file changed: '+method)
+        rows = lines(routes)
+        mapping = {r['uid']:r for r in rows}
+        if len(rows)!=len(tasks) or set(mapping)!={t['uid'] for t in tasks}:
+            raise ValueError('Incomplete completed-method routes: '+method)
+        current=[]
+        for ds in sorted(manifest['counts']):
+            batch=[t for t in tasks if t['dataset']==ds]
+            current.append({'method':method,'dataset':ds,**raw.metric(batch,[mapping[t['uid']] for t in batch],manifest['cost_normalization'])})
+        metrics.extend(current); means.append({'method':method,**raw.dataset_average(current)})
+        paths[method]=str(routes)
+        statuses.append({'method':method,'status':'COMPLETED','completed':len(tasks),'total':len(tasks)})
+    if not metrics:raise ValueError('No completed methods in current rerun')
+    return {'tasks':len(tasks),'finished':None,'coverage':manifest['counts'],'dataset_metrics':metrics,
+            'dataset_arithmetic_means':means,'snapshot_sha256':manifest['tasks_sha256'],
+            'aggregation_version':'raw_usd_range_weighted_v1','agent_workers':32,
+            'method_status':statuses,'_route_paths':paths}
+
+
 def build():
     pointer = read(BASE / 'all_datasets/current-results.json')
     output = Path(pointer['primary_output'])
     stage = output if (output/'summary.json').exists() else output/'stages/existing'
-    summary = read(stage / 'summary.json')
+    latest = BASE/'all_datasets/results/raw_usd_8datasets_20261103'
+    if (latest/'cohort/manifest.json').exists() and (latest/'random/summary.json').exists():
+        stage = latest
+        summary = read(stage/'summary.json') if (stage/'summary.json').exists() else partial_routing(stage)
+    else:
+        summary = read(stage / 'summary.json')
     manifest, cohort = historical.load_snapshot(stage / 'cohort')
     cache = ReceiptCache()
     print('Collecting formal outcomes and selected-attempt usage…', flush=True)
