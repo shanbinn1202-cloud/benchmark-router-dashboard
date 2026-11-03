@@ -91,7 +91,7 @@ function renderModels() {
       <div class="dataset-bars">${modelRows.map(r=>{
         const value=modelMetricValue(r,metric), hasValue=valid(value), incomplete=partial(r);
         const lower=metric==='raw_cost_usd'&&incomplete;
-        const note=metric==='accuracy'?`${r.passed} passed / ${r.graded} graded`:metric.includes('tokens')?`${r.token_tasks}/${r.graded} complete usage records`:`${r.cost_tasks}/${r.graded} complete cost records`;
+        const note=metric==='accuracy'?`${r.passed} passed / ${r.graded} graded`:metric.includes('tokens')?`${r.token_tasks}/${r.graded} trajectories with recorded usage`:`${r.cost_tasks}/${r.graded} trajectories with recorded cost`;
         const display=(hasValue&&lower?'≥ ':'')+formatModelMetric(value,metric)+(hasValue&&incomplete&&!lower?'†':'');
         const title=`${dsLabel(r.dataset)}: ${display}. ${note}${metric.includes('tokens')&&hasValue?'. '+integer(value)+' tokens per task':''}`;
         return `<div class="dataset-bar-row" data-dataset="${esc(r.dataset)}" title="${esc(title)}"><span class="dataset-label">${esc(dsLabel(r.dataset))}</span><div class="dataset-track ${hasValue?'':'missing'}" role="img" aria-label="${esc(title)}"><span style="width:${hasValue?Math.max(0,Math.min(100,Number(value)/max*100)):0}%;background:${colors[m.id]}"></span></div><span class="dataset-value">${display}</span></div>`;
@@ -101,8 +101,9 @@ function renderModels() {
   }).join('')||'<div class="empty">No matching results.</div>';
   const renderRow=r=>{
     const partial=r.cost_tasks<r.graded, tokenPartial=r.token_tasks<r.graded;
-    const costNote=partial?`<span class="coverage">Complete: ${r.cost_tasks}/${r.graded}</span>`:'';
-    const tokenNote=tokenPartial?`<span class="coverage">Coverage: ${r.token_tasks}/${r.graded}</span>`:'';
+    const incompleteCalls=r.complete_cost_tasks<r.cost_tasks||r.complete_token_tasks<r.token_tasks;
+    const costNote=incompleteCalls?`<span class="coverage">${r.cost_tasks}/${r.graded} trajectories · recorded cost</span>`:partial?`<span class="coverage">Complete: ${r.cost_tasks}/${r.graded}</span>`:'';
+    const tokenNote=incompleteCalls?`<span class="coverage">${r.token_tasks}/${r.graded} trajectories · recorded tokens</span>`:tokenPartial?`<span class="coverage">Coverage: ${r.token_tasks}/${r.graded}</span>`:'';
     return `<tr><td><span><span class="model-dot" style="background:${colors[r.model]};width:5px;height:5px;margin-right:5px"></span>${esc(modelLabel(r.model))}</span></td><td class="num">${r.passed} / ${r.graded}${r.ungraded?`<span class="cell-sub">${r.running?`${r.running} running`:`${r.ungraded} ungraded`} · ${r.planned} total</span>`:''}</td><td class="num">${f(r.mean_cost_usd,6)}</td><td class="num" title="${integer(r.mean_input_tokens)}">${integer(r.mean_input_tokens)}</td><td class="num" title="${integer(r.mean_output_tokens)}">${integer(r.mean_output_tokens)}</td><td class="num">${integer(r.mean_total_tokens)}${tokenNote}</td><td class="num cell-value">${partial?'≥ ':''}${f(partial?r.known_cost_usd:r.raw_cost_usd,4)}${costNote}</td><td class="num cell-value">${pct(r.accuracy)}</td></tr>`;
   };
   $('#model-tables').innerHTML=datasetOrder.filter(id=>rows.some(r=>r.dataset===id)).map(id=>{

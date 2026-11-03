@@ -30,6 +30,20 @@ class StatisticsTests(unittest.TestCase):
         self.assertEqual(q['normalized_cost_mean'],'0')
         self.assertEqual(scales['ds1000']['range_cost_usd'],'4')
 
+    def test_partial_trajectory_is_included_in_means(self):
+        cells=[{'dataset':'terminal','model':'gemma','passed':False,
+                'cost_usd':None,'known_cost_usd':'2','usage_calls':3,
+                '_input':900,'_output':100,'_tokens_complete':False},
+               {'dataset':'terminal','model':'gemma','passed':True,
+                'cost_usd':'1','_input':400,'_output':100,'_tokens_complete':True}]
+        rows,_=exporter.summarize(cells,'formal')
+        r=rows[0]
+        self.assertEqual(r['cost_tasks'],2)
+        self.assertEqual(r['token_tasks'],2)
+        self.assertEqual(r['complete_cost_tasks'],1)
+        self.assertEqual(r['mean_cost_usd'],'1.5')
+        self.assertEqual(r['mean_total_tokens'],750)
+
     def test_raw_cost_metric(self):
         row={'tasks':10,'passed':4,'raw_backend_cost_usd':'1.5',
              'raw_router_cost_usd':'0.5','raw_total_cost_usd':'2'}

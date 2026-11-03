@@ -170,8 +170,13 @@ def summarize(cells, scope, scales=None):
             if not group:
                 continue
             graded = [c for c in group if isinstance(c.get('passed'), bool)]
-            priced = [c for c in graded if number(c.get('cost_usd')) is not None]
-            tokened = [c for c in graded if c['_tokens_complete']]
+            complete_cost_tasks = sum(number(c.get('cost_usd')) is not None for c in graded)
+            complete_token_tasks = sum(c['_tokens_complete'] for c in graded)
+            # A missing final receipt must not discard the rest of a task's trajectory.
+            priced = [{**c, 'cost_usd': c.get('cost_usd') if number(c.get('cost_usd')) is not None else c.get('known_cost_usd')}
+                      for c in graded if number(c.get('cost_usd')) is not None or
+                      (c.get('usage_calls', 0) > 0 and number(c.get('known_cost_usd')) is not None)]
+            tokened = [c for c in graded if c['_tokens_complete'] or c.get('usage_calls', 0) > 0]
             cost = sum((number(c['cost_usd']) for c in priced), Decimal(0))
             known = sum((number(c.get('cost_usd')) or number(c.get('known_cost_usd')) or Decimal(0) for c in graded), Decimal(0))
             norm = []
@@ -180,6 +185,7 @@ def summarize(cells, scope, scales=None):
                 norm = [(number(c['cost_usd'])-lo)/span if span else Decimal(0) for c in priced]
             ni = sum(c['_input'] for c in tokened); no = sum(c['_output'] for c in tokened)
             rows.append({'scope': scope, 'dataset': ds, 'model': model, 'planned': len(group),
+                'complete_cost_tasks': complete_cost_tasks, 'complete_token_tasks': complete_token_tasks,
                 'graded': len(graded), 'passed': sum(c['passed'] for c in graded),
                 'accuracy': sum(c['passed'] for c in graded)/len(graded) if graded else None,
                 'running': sum(c.get('run_status') == 'RUNNING' for c in group),
@@ -288,7 +294,7 @@ def build():
             'accuracy':'Passed / graded tasks. Three interrupted Science trials are failures under explicit user adjudication. Terminal deadlocks, client timeouts and verifier timeouts also count as failures. Running or ungraded tasks are excluded.',
             'cost':'Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.',
             'normalization':'c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.',
-            'tokens':'Recorded tokens per task, including repeated inputs and verified retry usage. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
+            'tokens':'Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. Interrupted requests without usage are not estimated; complete accounting coverage is reported separately. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
             'routing':'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.',
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
             'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.',
