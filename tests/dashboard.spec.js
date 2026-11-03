@@ -28,7 +28,14 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   for(const panel of await page.locator('.model-dataset-panel').all()){
     await expect(panel.locator('table')).toBeVisible();
     await expect(panel.locator('tbody tr')).toHaveCount(4);
-    const accuracy=await panel.locator('tbody td:nth-child(2)').allTextContents();
+    await expect(panel.locator('th').nth(7)).toHaveText('Accuracy ↕');
+    await expect(panel.locator('th').nth(8)).toHaveText('Norm. cost / task ↕');
+    for(const row of await panel.locator('tbody tr').all()){
+      await expect(row.locator('td.cell-value')).toHaveCount(2);
+      await expect(row.locator('td').nth(7)).toHaveClass('num cell-value');
+      await expect(row.locator('td').nth(8)).toHaveClass('num cell-value');
+    }
+    const accuracy=await panel.locator('tbody td:nth-child(8)').allTextContents();
     expect(parseFloat(accuracy[0])).toBeGreaterThanOrEqual(parseFloat(accuracy.at(-1)));
   }
   await page.locator('#routing-dataset').selectOption('ds1000');
