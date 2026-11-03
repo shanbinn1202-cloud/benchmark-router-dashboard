@@ -128,10 +128,10 @@ test('range-weighted routing describes raw costs and batched feedback',async({pa
   await expect(page.locator('#routing-metrics')).toContainText('μd / D');
   await expect(page.locator('#routing-metrics')).toContainText('unweighted arithmetic mean');
   await expect(page.locator('#routing-methods')).toContainText('raw USD prices');
-  if(data.routing.agent_variant==='online_llm_tools_memory_replay') {
-    await expect(page.locator('#routing-methods')).toContainText('DeepSeek selects a model');
+  if(['online_llm_tools_memory_replay','online_llm_tools_memory_fullquery16'].includes(data.routing.agent_variant)) {
+    await expect(page.locator('#routing-methods')).toContainText('DeepSeek');
     await expect(page.locator('#routing-methods')).toContainText('original observe()');
-    await expect(page.locator('#routing-methods')).toContainText('32 independent causal streams');
+    await expect(page.locator('#routing-methods')).toContainText(data.routing.agent_variant==='online_llm_tools_memory_fullquery16'?'16 independent causal streams':'32 independent causal streams');
   } else if(data.routing.agent_variant==='github_id_hierarchical_nested_adapted') {
     await expect(page.locator('#routing-methods')).toContainText('grouped inner validation');
     await expect(page.locator('#routing-methods')).toContainText('no test-outcome feedback');
