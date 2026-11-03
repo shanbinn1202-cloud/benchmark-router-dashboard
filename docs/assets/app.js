@@ -81,7 +81,7 @@ function renderModels() {
     const prefix=metric==='raw_cost_usd'&&aggregatePartial?'≥ ':'';
     const suffix=metric!=='raw_cost_usd'&&aggregatePartial?'†':'';
     return `<article class="model-window" data-model="${esc(m.id)}" aria-labelledby="model-title-${esc(m.id)}">
-      <div class="model-window-heading"><span class="window-kicker">${esc(metricLabel)}</span><h3 id="model-title-${esc(m.id)}" title="${esc(m.model_id)}">${esc(m.label)}</h3><p class="thinking-mode">Thinking: ${esc(thinkingModes[m.id])}</p></div>
+      <div class="model-window-heading"><span class="window-kicker">${esc(metricLabel)}</span><h3 id="model-title-${esc(m.id)}" title="${esc(m.model_id)}">${esc(m.label)} <span class="thinking-label">(Thinking: ${esc(thinkingModes[m.id])})</span></h3></div>
       <div class="dataset-axis" aria-hidden="true"><span></span><div><span>${formatModelMetric(0,metric,true)}</span><span>${formatModelMetric(max/2,metric,true)}</span><span>${formatModelMetric(max,metric,true)}</span></div><span></span></div>
       <div class="dataset-bars">${modelRows.map(r=>{
         const value=modelMetricValue(r,metric), hasValue=valid(value), incomplete=partial(r);
