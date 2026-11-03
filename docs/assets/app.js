@@ -65,12 +65,17 @@ function modelScale(rows,metric) {
   const magnitude=10**Math.floor(Math.log10(maximum));
   return [1,2,5,10].find(n=>n*magnitude>=maximum)*magnitude;
 }
+function orderedDatasets() {
+  const datasets=data.datasets.filter(d=>d.id!=='science');
+  const science=data.datasets.find(d=>d.id==='science');
+  if(science)datasets.splice(datasets.findIndex(d=>d.id==='verilogeval')+1,0,science);
+  return datasets;
+}
 function renderModels() {
   const rows=modelRows(), metric=$('#model-metric').value;
   $('#scope-note').textContent='All graded results · Shared chart scale across models';
   const max=modelScale(rows,metric), metricLabel=$('#model-metric').selectedOptions[0].textContent;
-  const datasetOrder=data.datasets.map(d=>d.id).filter(id=>id!=='science');
-  datasetOrder.splice(datasetOrder.indexOf('verilogeval')+1,0,'science');
+  const datasetOrder=orderedDatasets().map(d=>d.id);
   const showModels=data.models.filter(m=>rows.some(r=>r.model===m.id));
   $('#model-chart').innerHTML=showModels.map(m=>{
     const modelRows=rows.filter(r=>r.model===m.id).sort((a,b)=>datasetOrder.indexOf(a.dataset)-datasetOrder.indexOf(b.dataset));
@@ -133,7 +138,7 @@ function renderRouting() {
   $('#routing-coverage').textContent=`${Object.keys(data.routing.coverage).length} datasets · ${integer(data.routing.tasks)} common tasks`;
   bars('#efficiency-chart',rows,'perf');bars('#f1-chart',rows,'f1',1);
   const filtered=data.routing.metrics.filter(r=>equal||r.dataset===ds);
-  $('#routing-tables').innerHTML=data.datasets.filter(d=>filtered.some(r=>r.dataset===d.id)).map(d=>{
+  $('#routing-tables').innerHTML=orderedDatasets().filter(d=>filtered.some(r=>r.dataset===d.id)).map(d=>{
     const datasetRows=order(filtered.filter(r=>r.dataset===d.id),routeSort);
     const bestValue=key=>Math.max(...datasetRows.map(r=>r[key]).filter(valid).map(Number));
     const isBest=(r,key)=>valid(r[key])&&Number(r[key])===bestValue(key);
