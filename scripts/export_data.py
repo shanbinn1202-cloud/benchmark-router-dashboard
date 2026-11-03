@@ -197,10 +197,37 @@ def summarize(cells, scope, scales=None):
     return rows, scales
 
 
+def raw_cost_metric(row):
+    """Re-score existing choices with completion rate / mean total USD."""
+    row = dict(row)
+    total = number(row.get('raw_total_cost_usd'))
+    tasks = row.get('tasks', 0)
+    row['cost_basis'] = 'raw_total_usd_per_task'
+    row['metric_cost'] = str(total / tasks) if total is not None and tasks else None
+    if total is None or not tasks:
+        value, status = None, 'undefined'
+    elif total == 0:
+        value, status = None, 'infinite' if row['passed'] else 'undefined'
+    else:
+        value, status = float(Decimal(row['passed']) / total), 'finite'
+    row['perf_per_cost'], row['perf_per_cost_status'] = value, status
+    return row
+
+
 def routing_data(stage, summary):
     metrics = [{k: r.get(k) for k in ('method','dataset','tasks','passed','performance','perf_per_cost',
         'perf_per_cost_status','macro_f1','micro_f1','weighted_f1','raw_backend_cost_usd',
         'raw_router_cost_usd','raw_total_cost_usd','metric_cost')} for r in summary['dataset_metrics']]
+    metrics = [raw_cost_metric(row) for row in metrics]
+    means = []
+    for original in summary['dataset_arithmetic_means']:
+        rows = [r for r in metrics if r['method'] == original['method']]
+        statuses = {r['perf_per_cost_status'] for r in rows}
+        status = 'undefined' if not rows or 'undefined' in statuses else ('infinite' if 'infinite' in statuses else 'finite')
+        means.append({**original,
+            'mean_perf_per_cost': sum(r['perf_per_cost'] for r in rows)/len(rows) if status == 'finite' else None,
+            'mean_perf_per_cost_status': status,
+            'cost_basis': 'raw_total_usd_per_task'})
     choices = []
     combined = stage / 'routes.jsonl'
     if combined.exists():
@@ -217,7 +244,7 @@ def routing_data(stage, summary):
         counts = Counter((r['dataset'], r['selected_model']) for r in lines(p))
         choices.extend({'method':method,'dataset':ds,'model':model,'count':n} for (ds,model),n in counts.items())
     return {'tasks': summary['tasks'], 'finished': summary['finished'], 'coverage':summary['coverage'],
-            'metrics': metrics, 'means': summary['dataset_arithmetic_means'], 'choices': choices,
+            'metrics': metrics, 'means': means, 'choices': choices,
             'snapshot_sha256': summary['snapshot_sha256'], 'method_version':'github_aligned',
             'includes_terminal': 'terminal' in summary['coverage']}
 
@@ -262,7 +289,7 @@ def build():
             'cost':'Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.',
             'normalization':'c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.',
             'tokens':'Recorded tokens per task, including repeated inputs and verified retry usage. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
-            'routing':'Perf/Cost = accuracy / mean normalized total cost, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.',
+            'routing':'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.',
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
             'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.',
             'comparison':'Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction.'}}

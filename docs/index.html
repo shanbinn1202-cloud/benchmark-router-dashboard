@@ -7,7 +7,7 @@
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css?v=20261103-visible-tables">
-  <script src="assets/app.js?v=20261103-raw-cost-last" defer></script>
+  <script src="assets/app.js?v=20261103-routing-raw-cost" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -41,7 +41,7 @@
     <section class="guide-section" aria-labelledby="routing-metrics-title">
       <h3 id="routing-metrics-title">Evaluation metrics</h3>
       <div class="routing-guide" id="routing-metrics">
-      <div><h4>Perf / Cost</h4><p>Perf / Cost divides the successful completion rate (Perf) by mean per-task normalized cost, including solver costs and routing fees scaled by the same range. To align cost scales across datasets, solver costs use per-dataset min–max normalization across eligible task–model pairs: c′ = (c − min) / (max − min), mapping them to [0, 1].</p></div>
+      <div><h4>Perf / Cost</h4><p>Perf / Cost divides the successful completion rate by mean raw cost per task in USD, including solver and router calls. Costs are not normalized. Overall Perf / Cost is the unweighted mean of the per-dataset scores.</p></div>
       <div><h4>Macro-F1</h4><p>Compares routing choices against each task’s ground-truth label: the cheapest successful model, or the cheapest model if all fail (cost ties use alphabetical model aliases). F1 is averaged equally over the four model labels; both headline metrics are then averaged equally across datasets.</p></div>
       </div>
     </section>

@@ -56,6 +56,8 @@ test('English results, simplified layout, routing tables and metrics',async({pag
     const dataset=await panel.getAttribute('data-dataset');
     const rows=data.routing.metrics.filter(r=>r.dataset===dataset);
     await expect(panel.locator('tbody tr')).toHaveCount(rows.length);
+    await expect(panel.locator('th')).toHaveCount(6);
+    await expect(panel.locator('thead')).not.toContainText('Norm. cost');
     await expect(panel.locator('thead')).toContainText('Solver, USD');
     await expect(panel.locator('thead')).not.toContainText('Router, USD');
     await expect(panel.locator('thead')).not.toContainText('Total, USD');

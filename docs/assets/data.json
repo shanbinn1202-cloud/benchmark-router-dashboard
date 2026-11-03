@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T12:25:29.159306+00:00",
+  "updated_at": "2026-11-03T12:27:05.385087+00:00",
   "models": [
     {
       "id": "qwen",
@@ -421,25 +421,25 @@
       "dataset": "kernelbench",
       "model": "muse",
       "planned": 270,
-      "graded": 225,
-      "passed": 137,
-      "accuracy": 0.6088888888888889,
+      "graded": 238,
+      "passed": 139,
+      "accuracy": 0.5840336134453782,
       "running": 0,
-      "ungraded": 45,
-      "cost_tasks": 225,
+      "ungraded": 32,
+      "cost_tasks": 238,
       "adjudicated_failures": 0,
       "simulated_cost_repairs": 0,
-      "raw_cost_usd": "0.34309282",
-      "known_cost_usd": "0.34309282",
-      "mean_cost_usd": "0.001524856977777777777777777778",
-      "normalized_cost_sum": "11.13205590413989330466791777",
-      "normalized_cost_mean": "0.04947580401839952579852407898",
-      "token_tasks": 225,
-      "input_tokens": 252895,
-      "output_tokens": 247536,
-      "mean_input_tokens": 1123.9777777777779,
-      "mean_output_tokens": 1100.16,
-      "mean_total_tokens": 2224.137777777778
+      "raw_cost_usd": "0.36215270",
+      "known_cost_usd": "0.36215270",
+      "mean_cost_usd": "0.00152165",
+      "normalized_cost_sum": "11.74461996894053973685594635",
+      "normalized_cost_mean": "0.04934714272664092326410061492",
+      "token_tasks": 238,
+      "input_tokens": 270897,
+      "output_tokens": 260555,
+      "mean_input_tokens": 1138.2226890756303,
+      "mean_output_tokens": 1094.7689075630253,
+      "mean_total_tokens": 2232.9915966386557
     },
     {
       "scope": "formal",
@@ -1794,7 +1794,7 @@
         "tasks": 387,
         "passed": 96,
         "performance": 0.24806201550387597,
-        "perf_per_cost": 5.913332290137677,
+        "perf_per_cost": 20.388050371265177,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.16893537414965987,
         "micro_f1": 0.24031007751937986,
@@ -1802,7 +1802,8 @@
         "raw_backend_cost_usd": "4.708640515",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "4.708640515",
-        "metric_cost": "0.04194961543385556629399363160"
+        "metric_cost": "0.01216702975452196382428940568",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Random",
@@ -1810,7 +1811,7 @@
         "tasks": 140,
         "passed": 42,
         "performance": 0.3,
-        "perf_per_cost": 3.509544090358946,
+        "perf_per_cost": 410.0044002257953,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.1245744959413459,
         "micro_f1": 0.19285714285714287,
@@ -1818,7 +1819,8 @@
         "raw_backend_cost_usd": "0.102437925",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.102437925",
-        "metric_cost": "0.08548118851794133118335602936"
+        "metric_cost": "0.0007316994642857142857142857143",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Random",
@@ -1826,7 +1828,7 @@
         "tasks": 1000,
         "passed": 383,
         "performance": 0.383,
-        "perf_per_cost": 10.75521060374327,
+        "perf_per_cost": 1315.8837211207158,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.16887243855377315,
         "micro_f1": 0.238,
@@ -1834,7 +1836,8 @@
         "raw_backend_cost_usd": "0.291059152",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.291059152",
-        "metric_cost": "0.03561064623566736437476139709"
+        "metric_cost": "0.000291059152",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Random",
@@ -1842,7 +1845,7 @@
         "tasks": 51,
         "passed": 23,
         "performance": 0.45098039215686275,
-        "perf_per_cost": 3.5991412531720037,
+        "perf_per_cost": 325.0549332237531,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.153828197945845,
         "micro_f1": 0.21568627450980393,
@@ -1850,7 +1853,8 @@
         "raw_backend_cost_usd": "0.070757271",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.070757271",
-        "metric_cost": "0.1253022208448761634058308281"
+        "metric_cost": "0.001387397470588235294117647059",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Random",
@@ -1858,7 +1862,7 @@
         "tasks": 64,
         "passed": 33,
         "performance": 0.515625,
-        "perf_per_cost": 6.710505674342393,
+        "perf_per_cost": 60.92133359819468,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.17507246376811597,
         "micro_f1": 0.203125,
@@ -1866,7 +1870,8 @@
         "raw_backend_cost_usd": "0.541682167",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.541682167",
-        "metric_cost": "0.07683847164774650634080943352"
+        "metric_cost": "0.008463783859375",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Random",
@@ -1874,7 +1879,7 @@
         "tasks": 81,
         "passed": 12,
         "performance": 0.14814814814814814,
-        "perf_per_cost": 3.2019547663742354,
+        "perf_per_cost": 0.1386071623212088,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.2491666666666667,
         "micro_f1": 0.30864197530864196,
@@ -1882,7 +1887,8 @@
         "raw_backend_cost_usd": "86.57561268148",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "86.57561268148",
-        "metric_cost": "0.04626803279794771973707959535"
+        "metric_cost": "1.068834724462716049382716049",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Random",
@@ -1890,7 +1896,7 @@
         "tasks": 153,
         "passed": 104,
         "performance": 0.6797385620915033,
-        "perf_per_cost": 28.153890015201227,
+        "perf_per_cost": 1258.4834947166987,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.13574645305276584,
         "micro_f1": 0.20261437908496732,
@@ -1898,7 +1904,8 @@
         "raw_backend_cost_usd": "0.082639145",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.082639145",
-        "metric_cost": "0.02414368180469873644925917763"
+        "metric_cost": "0.0005401251307189542483660130719",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
@@ -1906,7 +1913,7 @@
         "tasks": 387,
         "passed": 114,
         "performance": 0.29457364341085274,
-        "perf_per_cost": 19.11354351614463,
+        "perf_per_cost": 65.8998799425582,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.22729069882376196,
         "micro_f1": 0.627906976744186,
@@ -1914,7 +1921,8 @@
         "raw_backend_cost_usd": "1.72989693",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "1.72989693",
-        "metric_cost": "0.01541177559054056650476556095"
+        "metric_cost": "0.004470017906976744186046511628",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
@@ -1922,7 +1930,7 @@
         "tasks": 140,
         "passed": 43,
         "performance": 0.30714285714285716,
-        "perf_per_cost": 15.625470500935625,
+        "perf_per_cost": 1211.6092453111426,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.24249193348225367,
         "micro_f1": 0.7357142857142858,
@@ -1930,7 +1938,8 @@
         "raw_backend_cost_usd": "0.03548999",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.03548999",
-        "metric_cost": "0.01965655095790337884009379934"
+        "metric_cost": "0.0002534999285714285714285714286",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
@@ -1938,7 +1947,7 @@
         "tasks": 1000,
         "passed": 555,
         "performance": 0.555,
-        "perf_per_cost": 66.45341983316133,
+        "perf_per_cost": 6607.76194150571,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.3066500265499263,
         "micro_f1": 0.618,
@@ -1946,7 +1955,8 @@
         "raw_backend_cost_usd": "0.083992130",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.083992130",
-        "metric_cost": "0.008351714650553558969498308383"
+        "metric_cost": "0.00008399213",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
@@ -1954,7 +1964,7 @@
         "tasks": 51,
         "passed": 39,
         "performance": 0.7647058823529411,
-        "perf_per_cost": 19.9940497062346,
+        "perf_per_cost": 1199.6128018987101,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.3625,
         "micro_f1": 0.7254901960784313,
@@ -1962,7 +1972,8 @@
         "raw_backend_cost_usd": "0.032510490",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.032510490",
-        "metric_cost": "0.03824667306466126245893636835"
+        "metric_cost": "0.0006374605882352941176470588235",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
@@ -1970,7 +1981,7 @@
         "tasks": 64,
         "passed": 33,
         "performance": 0.515625,
-        "perf_per_cost": 24.274160130828353,
+        "perf_per_cost": 204.28181367039784,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.19976771196283394,
         "micro_f1": 0.4375,
@@ -1978,7 +1989,8 @@
         "raw_backend_cost_usd": "0.161541546",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.161541546",
-        "metric_cost": "0.021241723595007213671394394"
+        "metric_cost": "0.00252408665625",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
@@ -1986,7 +1998,7 @@
         "tasks": 81,
         "passed": 10,
         "performance": 0.12345679012345678,
-        "perf_per_cost": 10.560042876781855,
+        "perf_per_cost": 0.45052048697564206,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.1762295081967213,
         "micro_f1": 0.5308641975308642,
@@ -1994,7 +2006,8 @@
         "raw_backend_cost_usd": "22.19654885648",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "22.19654885648",
-        "metric_cost": "0.01169093644448155013766456969"
+        "metric_cost": "0.2740314673639506172839506173",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
@@ -2002,7 +2015,7 @@
         "tasks": 153,
         "passed": 119,
         "performance": 0.7777777777777778,
-        "perf_per_cost": 146.71608940230573,
+        "perf_per_cost": 5528.0186930648915,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.2620332883490778,
         "micro_f1": 0.7058823529411765,
@@ -2010,7 +2023,8 @@
         "raw_backend_cost_usd": "0.02152670",
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.02152670",
-        "metric_cost": "0.005301243925913653600122206096"
+        "metric_cost": "0.0001406973856209150326797385621",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
@@ -2018,7 +2032,7 @@
         "tasks": 387,
         "passed": 102,
         "performance": 0.26356589147286824,
-        "perf_per_cost": 6.418268726617846,
+        "perf_per_cost": 22.128975622229746,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.10426727303983621,
         "micro_f1": 0.2351421188630491,
@@ -2026,7 +2040,8 @@
         "raw_backend_cost_usd": "4.56546473",
         "raw_router_cost_usd": "0.04387651296",
         "raw_total_cost_usd": "4.60934124296",
-        "metric_cost": "0.04106495111053977235012413928"
+        "metric_cost": "0.01191044248826873385012919897",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
@@ -2034,7 +2049,7 @@
         "tasks": 140,
         "passed": 45,
         "performance": 0.32142857142857145,
-        "perf_per_cost": 6.917671880825471,
+        "perf_per_cost": 717.0655328714562,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.17721379916501867,
         "micro_f1": 0.35,
@@ -2042,7 +2057,8 @@
         "raw_backend_cost_usd": "0.05680494",
         "raw_router_cost_usd": "0.00595083048",
         "raw_total_cost_usd": "0.06275577048",
-        "metric_cost": "0.04646484785141559290704133956"
+        "metric_cost": "0.0004482555034285714285714285714",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
@@ -2050,7 +2066,7 @@
         "tasks": 1000,
         "passed": 541,
         "performance": 0.541,
-        "perf_per_cost": 35.97255428543769,
+        "perf_per_cost": 4013.5733048842,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.24405383728140762,
         "micro_f1": 0.484,
@@ -2058,7 +2074,8 @@
         "raw_backend_cost_usd": "0.086206788",
         "raw_router_cost_usd": "0.04858581672",
         "raw_total_cost_usd": "0.13479260472",
-        "metric_cost": "0.01503924341060779590063583588"
+        "metric_cost": "0.00013479260472",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
@@ -2066,7 +2083,7 @@
         "tasks": 51,
         "passed": 28,
         "performance": 0.5490196078431373,
-        "perf_per_cost": 10.831823540708285,
+        "perf_per_cost": 737.3181489050656,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.16883116883116883,
         "micro_f1": 0.5098039215686274,
@@ -2074,7 +2091,8 @@
         "raw_backend_cost_usd": "0.034111796",
         "raw_router_cost_usd": "0.00386366960",
         "raw_total_cost_usd": "0.03797546560",
-        "metric_cost": "0.05068579688173513846516013706"
+        "metric_cost": "0.0007446169725490196078431372549",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
@@ -2082,7 +2100,7 @@
         "tasks": 64,
         "passed": 33,
         "performance": 0.515625,
-        "perf_per_cost": 19.738811465996037,
+        "perf_per_cost": 169.30635960610775,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.17708333333333331,
         "micro_f1": 0.34375,
@@ -2090,7 +2108,8 @@
         "raw_backend_cost_usd": "0.189312638",
         "raw_router_cost_usd": "0.00560030016",
         "raw_total_cost_usd": "0.19491293816",
-        "metric_cost": "0.02612239348292397828864392106"
+        "metric_cost": "0.00304551465875",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
@@ -2098,7 +2117,7 @@
         "tasks": 81,
         "passed": 10,
         "performance": 0.12345679012345678,
-        "perf_per_cost": 10.686119021803247,
+        "perf_per_cost": 0.4557940181367963,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.18604651162790697,
         "micro_f1": 0.5925925925925926,
@@ -2106,7 +2125,8 @@
         "raw_backend_cost_usd": "21.9352103924799999995",
         "raw_router_cost_usd": "0.00452466784",
         "raw_total_cost_usd": "21.9397350603199999995",
-        "metric_cost": "0.01155300534006441099629326834"
+        "metric_cost": "0.2708609266706172839444444444",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
@@ -2114,7 +2134,7 @@
         "tasks": 153,
         "passed": 117,
         "performance": 0.7647058823529411,
-        "perf_per_cost": 94.75521916374463,
+        "perf_per_cost": 3835.086145579933,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.2761430336731541,
         "micro_f1": 0.7254901960784313,
@@ -2122,7 +2142,8 @@
         "raw_backend_cost_usd": "0.022998504",
         "raw_router_cost_usd": "0.00750928528",
         "raw_total_cost_usd": "0.03050778928",
-        "metric_cost": "0.008070329941736169734115796307"
+        "metric_cost": "0.0001993973155555555555555555556",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
@@ -2130,7 +2151,7 @@
         "tasks": 387,
         "passed": 114,
         "performance": 0.29457364341085274,
-        "perf_per_cost": 33.6965673502161,
+        "perf_per_cost": 116.17938562673605,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.19937205651491366,
         "micro_f1": 0.6563307493540051,
@@ -2138,7 +2159,8 @@
         "raw_backend_cost_usd": "0.936522920",
         "raw_router_cost_usd": "0.04471828200",
         "raw_total_cost_usd": "0.98124120200",
-        "metric_cost": "0.008741948114455746971524539183"
+        "metric_cost": "0.002535506981912144702842377261",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
@@ -2146,7 +2168,7 @@
         "tasks": 140,
         "passed": 40,
         "performance": 0.2857142857142857,
-        "perf_per_cost": 5.997564637476858,
+        "perf_per_cost": 625.4951892949196,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.16146476224063952,
         "micro_f1": 0.32857142857142857,
@@ -2154,7 +2176,8 @@
         "raw_backend_cost_usd": "0.056953885",
         "raw_router_cost_usd": "0.00699544776",
         "raw_total_cost_usd": "0.06394933276",
-        "metric_cost": "0.04763838374145211957937791588"
+        "metric_cost": "0.0004567809482857142857142857143",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
@@ -2162,7 +2185,7 @@
         "tasks": 1000,
         "passed": 559,
         "performance": 0.559,
-        "perf_per_cost": 34.937930486282625,
+        "perf_per_cost": 3934.14557183887,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.1856190052159965,
         "micro_f1": 0.523,
@@ -2170,7 +2193,8 @@
         "raw_backend_cost_usd": "0.094730579",
         "raw_router_cost_usd": "0.04735872344",
         "raw_total_cost_usd": "0.14208930244",
-        "metric_cost": "0.01599980285665389729210273422"
+        "metric_cost": "0.00014208930244",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
@@ -2178,7 +2202,7 @@
         "tasks": 51,
         "passed": 38,
         "performance": 0.7450980392156863,
-        "perf_per_cost": 13.053250616913228,
+        "perf_per_cost": 931.7081850185486,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.2865448504983389,
         "micro_f1": 0.7450980392156863,
@@ -2186,7 +2210,8 @@
         "raw_backend_cost_usd": "0.033758130",
         "raw_router_cost_usd": "0.00702717232",
         "raw_total_cost_usd": "0.04078530232",
-        "metric_cost": "0.05708141681201273014462060782"
+        "metric_cost": "0.0007997118101960784313725490196",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
@@ -2194,7 +2219,7 @@
         "tasks": 64,
         "passed": 35,
         "performance": 0.546875,
-        "perf_per_cost": 17.67681447812554,
+        "perf_per_cost": 153.61961842937035,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.12941176470588237,
         "micro_f1": 0.34375,
@@ -2202,7 +2227,8 @@
         "raw_backend_cost_usd": "0.221189135",
         "raw_router_cost_usd": "0.00664634824",
         "raw_total_cost_usd": "0.22783548324",
-        "metric_cost": "0.03093741808948322200702604625"
+        "metric_cost": "0.003559929425625",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
@@ -2210,7 +2236,7 @@
         "tasks": 81,
         "passed": 18,
         "performance": 0.2222222222222222,
-        "perf_per_cost": 1.63865284020178,
+        "perf_per_cost": 0.07116693012852933,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.02564102564102564,
         "micro_f1": 0.04938271604938271,
@@ -2218,7 +2244,8 @@
         "raw_backend_cost_usd": "252.921629561",
         "raw_router_cost_usd": "0.00483456344",
         "raw_total_cost_usd": "252.92646412444",
-        "metric_cost": "0.1356127526040587666353977554"
+        "metric_cost": "3.122548939807901234567901235",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
@@ -2226,7 +2253,7 @@
         "tasks": 153,
         "passed": 115,
         "performance": 0.7516339869281046,
-        "perf_per_cost": 93.65623379680991,
+        "perf_per_cost": 3787.5983459132494,
         "perf_per_cost_status": "finite",
         "macro_f1": 0.22318725099601594,
         "micro_f1": 0.6797385620915033,
@@ -2234,41 +2261,46 @@
         "raw_backend_cost_usd": "0.021795084",
         "raw_router_cost_usd": "0.00856716392",
         "raw_total_cost_usd": "0.03036224792",
-        "metric_cost": "0.008025456037008680986028952961"
+        "metric_cost": "0.0001984460648366013071895424837",
+        "cost_basis": "raw_total_usd_per_task"
       }
     ],
     "means": [
       {
         "method": "Random",
         "datasets": 7,
-        "mean_perf_per_cost": 8.834796956189965,
+        "mean_perf_per_cost": 484.4106486312491,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.16802801286831034,
-        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N"
+        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
         "datasets": 7,
-        "mean_perf_per_cost": 43.24811085234173,
+        "mean_perf_per_cost": 2116.8049851257697,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.2538518810520821,
-        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N"
+        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
         "datasets": 7,
-        "mean_perf_per_cost": 26.47435258359046,
+        "mean_perf_per_cost": 1356.4191802124471,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.19051985099311794,
-        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N"
+        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N",
+        "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "datasets": 7,
-        "mean_perf_per_cost": 28.665287743718007,
+        "mean_perf_per_cost": 1364.1167804359745,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.17303438797325893,
-        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N"
+        "aggregation": "unweighted arithmetic mean of dataset metrics; every dataset has weight 1/N",
+        "cost_basis": "raw_total_usd_per_task"
       }
     ],
     "choices": [
@@ -2798,7 +2830,7 @@
     "cost": "Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.",
     "normalization": "c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.",
     "tokens": "Recorded tokens per task, including repeated inputs and verified retry usage. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.",
-    "routing": "Perf/Cost = accuracy / mean normalized total cost, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.",
+    "routing": "Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.",
     "labels": "The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.",
     "methods": "KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.",
     "comparison": "Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction."

@@ -30,8 +30,23 @@ class StatisticsTests(unittest.TestCase):
         self.assertEqual(q['normalized_cost_mean'],'0')
         self.assertEqual(scales['ds1000']['range_cost_usd'],'4')
 
+    def test_raw_cost_metric(self):
+        row={'tasks':10,'passed':4,'raw_backend_cost_usd':'1.5',
+             'raw_router_cost_usd':'0.5','raw_total_cost_usd':'2'}
+        result=exporter.raw_cost_metric(row)
+        self.assertEqual(result['metric_cost'],'0.2')
+        self.assertEqual(result['perf_per_cost'],2)
+        for cost, passed, status in [(None,4,'undefined'),('0',4,'infinite'),('0',0,'undefined')]:
+            result=exporter.raw_cost_metric({**row,'raw_total_cost_usd':cost,'passed':passed})
+            self.assertIsNone(result['perf_per_cost'])
+            self.assertEqual(result['perf_per_cost_status'],status)
+
     def test_published_means_and_selection_counts_match_source(self):
         d=json.loads((ROOT/'docs/assets/data.json').read_text())
+        for row in d['routing']['metrics']:
+            self.assertEqual(row['cost_basis'],'raw_total_usd_per_task')
+            total=float(row['raw_backend_cost_usd'])+float(row['raw_router_cost_usd'])
+            self.assertAlmostEqual(row['perf_per_cost'],row['passed']/total)
         for mean in d['routing']['means']:
             rows=[r for r in d['routing']['metrics'] if r['method']==mean['method']]
             self.assertAlmostEqual(sum(r['perf_per_cost'] for r in rows)/len(rows),mean['mean_perf_per_cost'])
