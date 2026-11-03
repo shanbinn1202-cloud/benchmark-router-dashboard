@@ -4,32 +4,24 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f5f3ee">
   <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Macro-F1.">
-  <title>Benchmark Router — Results</title>
+  <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css?v=20261103-cards">
-  <script src="assets/app.js?v=20261103-card-order" defer></script>
+  <script src="assets/app.js?v=20261103-clean-layout" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="header-inner">
-  <a class="brand" href="#top">Benchmark Router</a>
-  <nav aria-label="Main navigation">
-    <a href="#models" class="nav-item active">Models</a>
-    <a href="#routing" class="nav-item">Routing</a>
-    <a href="#methodology" class="nav-item">Definitions</a>
-    <a id="repo-link" href="https://github.com/shanbinn1202-cloud/benchmark-router-dashboard" target="_blank" rel="noopener">GitHub ↗</a>
-  </nav>
+  <a class="brand" href="#top">Coding Routing Benchmark</a>
 </div></header>
 <main id="main">
   <div class="page-heading"><div><h1>Benchmark results</h1><div class="snapshot"><span id="snapshot-time">Loading data…</span><button id="refresh" class="icon-button" aria-label="Refresh data" title="Refresh published snapshot">↻</button></div></div><a class="download" href="assets/data.json" download="benchmark-router-data.json">Download JSON ↓</a></div>
   <div id="error" class="error" role="alert" hidden></div>
   <section class="overview" aria-label="Benchmark overview" id="overview"></section>
-  <div class="collection-strip" id="collection" role="status"></div>
 
   <section id="models" class="section">
     <div class="section-heading"><h2><span class="section-number">01</span> Model performance</h2><a class="download" href="assets/models.csv" download>Model CSV ↓</a></div>
-    <div class="toolbar"><div class="segmented" role="group" aria-label="Evaluation sample"><button data-scope="formal" class="selected" aria-pressed="true">All results</button><button data-scope="cohort" aria-pressed="false">Routing cohort</button></div><div class="filters"><label class="sr-only" for="model-dataset">Model dataset</label><select id="model-dataset"></select><label class="sr-only" for="model-metric">Chart metric</label><select id="model-metric"><option value="accuracy">Accuracy</option><option value="raw_cost_usd">Total cost (USD)</option><option value="mean_cost_usd">Mean cost (USD / task)</option><option value="normalized_cost_mean">Mean normalized cost</option><option value="mean_input_tokens">Mean input tokens</option><option value="mean_output_tokens">Mean output tokens</option><option value="mean_total_tokens">Mean total tokens</option></select></div></div>
-    <div class="model-controls"><p class="scope-note" id="scope-note"></p><input id="model-search" type="search" placeholder="Search model or dataset" aria-label="Search model or dataset"></div>
+    <div class="toolbar"><span class="scope-note" id="scope-note"></span><div class="filters"><label class="sr-only" for="model-metric">Chart metric</label><select id="model-metric"><option value="accuracy">Accuracy</option><option value="raw_cost_usd">Total cost (USD)</option><option value="mean_cost_usd">Mean cost (USD / task)</option><option value="normalized_cost_mean">Mean normalized cost</option><option value="mean_input_tokens">Mean input tokens</option><option value="mean_output_tokens">Mean output tokens</option><option value="mean_total_tokens">Mean total tokens</option></select></div></div>
     <div class="model-chart" id="model-chart" aria-label="Results by model"></div>
     <details class="model-details panel" id="model-details"><summary>Full data table <span id="model-table-caption"></span></summary>
       <div class="table-wrap" tabindex="0" role="region" aria-label="Model statistics"><table id="model-table"><caption class="sr-only">Accuracy, cost and mean tokens by dataset and model</caption><thead><tr>
@@ -52,6 +44,6 @@
   </section>
 
   <section id="methodology" class="section definitions"><details><summary>Metric definitions &amp; evaluation notes</summary><div class="method-grid" id="method-notes"></div></details></section>
-  <footer><span>Benchmark Router</span><span id="footer-time"></span></footer>
+  <footer><span>Coding Routing Benchmark</span><span id="footer-time"></span></footer>
 </main>
 </body></html>

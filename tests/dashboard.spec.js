@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 const data=require('../docs/assets/data.json');
 const rowsFor=(scope,dataset)=>data.model_stats.filter(r=>r.scope===scope&&(!dataset||r.dataset===dataset));
-test('English results, scopes, filters, sorting and exports',async({page})=>{
+test('English results, simplified layout, sorting and exports',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');
   await expect(page.locator('#model-table tbody tr')).toHaveCount(rowsFor('formal').length);
@@ -13,18 +13,12 @@ test('English results, scopes, filters, sorting and exports',async({page})=>{
   await expect(page.locator('#error')).toBeHidden();
   await expect(page.locator('html')).toHaveAttribute('lang','en');
   expect(await page.locator('body').innerText()).not.toMatch(/[\u3400-\u9fff]/);
-  await page.locator('#model-dataset').selectOption('terminal');
-  await expect(page.locator('#model-table tbody tr')).toHaveCount(4);
-  await expect(page.locator('#model-table tbody')).toContainText('89');
-  await page.locator('[data-scope=cohort]').click();
-  if(rowsFor('cohort','terminal').length)await expect(page.locator('#model-table tbody tr')).toHaveCount(4);
-  else await expect(page.locator('#model-table tbody')).toContainText('No matching results');
-  await page.locator('#model-dataset').selectOption('science');
-  await expect(page.locator('#model-table tbody tr')).toHaveCount(4);
-  await expect(page.locator('#model-table tbody')).toContainText('/ '+rowsFor('cohort','science')[0].graded);
-  await page.locator('#model-search').fill('qwen');
-  await expect(page.locator('#model-table tbody tr')).toHaveCount(1);
-  await page.locator('#model-search').clear();
+  await expect(page).toHaveTitle('Coding Routing Benchmark — Results');
+  await expect(page.locator('.brand')).toHaveText('Coding Routing Benchmark');
+  await expect(page.locator('header nav, #collection, #model-dataset, #model-search, [data-scope]')).toHaveCount(0);
+  const total=data.datasets.reduce((n,d)=>n+Math.max(...rowsFor('formal',d.id).map(r=>r.planned)),0);
+  await expect(page.locator('.overview-stat').first()).toContainText('total-task');
+  await expect(page.locator('.overview-stat .stat-value').first()).toHaveText(total.toLocaleString('en-US'));
   await page.locator('#model-metric').selectOption('mean_output_tokens');
   await page.locator('[data-model-sort=accuracy]').click();
   const accuracy=await page.locator('#model-table tbody td:nth-child(2)').allTextContents();
@@ -44,7 +38,7 @@ test('English results, scopes, filters, sorting and exports',async({page})=>{
   const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));
   expect(width.scroll).toBeLessThanOrEqual(width.view+1);
   expect(errors).toEqual([]);
-  await page.locator('[data-scope=formal]').click();await page.locator('#model-dataset').selectOption('all');await page.locator('#model-metric').selectOption('accuracy');
+  await page.locator('#model-metric').selectOption('accuracy');
   await page.locator('#model-details summary').click();
   await page.locator('#models').screenshot({path:`test-results/model-cards-${test.info().project.name}.png`});
   await page.evaluate(()=>{document.activeElement?.blur();document.querySelectorAll('.table-wrap').forEach(el=>el.scrollLeft=0);window.scrollTo({top:0,behavior:'instant'});});
@@ -81,8 +75,8 @@ test('model windows share scales and retain costs, tokens and coverage',async({p
       }
     }
   }
-  await page.locator('#model-search').fill('qwen');
-  await expect(page.locator('.model-window')).toHaveCount(1);
-  await page.locator('#model-search').fill('nonexistent-dataset');
-  await expect(page.locator('#model-chart')).toContainText('No matching results');
+  for(const model of data.models){
+    const order=await page.locator(`.model-window[data-model="${model.id}"] .dataset-bar-row`).evaluateAll(rows=>rows.map(r=>r.dataset.dataset));
+    expect(order.indexOf('science')).toBe(order.indexOf('verilogeval')+1);
+  }
 });
