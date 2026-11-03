@@ -6,8 +6,8 @@
   <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Macro-F1.">
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=20261103-separated-guides">
-  <script src="assets/app.js?v=20261103-best-metrics" defer></script>
+  <link rel="stylesheet" href="assets/style.css?v=20261103-model-tables">
+  <script src="assets/app.js?v=20261103-model-tables" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -24,9 +24,7 @@
     <div class="toolbar"><span class="scope-note" id="scope-note"></span><div class="filters"><label class="sr-only" for="model-metric">Chart metric</label><select id="model-metric"><option value="accuracy">Accuracy</option><option value="raw_cost_usd">Total cost (USD)</option><option value="mean_cost_usd">Mean cost (USD / task)</option><option value="normalized_cost_mean">Mean normalized cost</option><option value="mean_input_tokens">Mean input tokens</option><option value="mean_output_tokens">Mean output tokens</option><option value="mean_total_tokens">Mean total tokens</option></select></div></div>
     <div class="model-chart" id="model-chart" aria-label="Results by model"></div>
     <details class="model-details panel" id="model-details"><summary>Full data table <span id="model-table-caption"></span></summary>
-      <div class="table-wrap" tabindex="0" role="region" aria-label="Model statistics"><table id="model-table"><caption class="sr-only">Accuracy, cost and mean tokens by dataset and model</caption><thead><tr>
-        <th>Dataset / Model</th><th class="num sortable" data-model-sort="accuracy" tabindex="0" role="button">Accuracy ↕</th><th class="num">Pass / Graded</th><th class="num sortable" data-model-sort="raw_cost_usd" tabindex="0" role="button">Cost, USD ↕</th><th class="num">USD / task</th><th class="num sortable" data-model-sort="normalized_cost_mean" tabindex="0" role="button">Norm. cost / task ↕</th><th class="num">Input / task</th><th class="num">Output / task</th><th class="num sortable" data-model-sort="mean_total_tokens" tabindex="0" role="button">Tokens / task ↕</th>
-      </tr></thead><tbody></tbody></table></div>
+      <div id="model-tables"></div>
     </details>
     <p class="footnote">† Partial coverage · ≥ Known cost only · — Unavailable. Tokens are cumulative per task.</p>
   </section>

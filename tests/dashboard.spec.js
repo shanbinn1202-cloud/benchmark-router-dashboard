@@ -4,7 +4,7 @@ const rowsFor=(scope,dataset)=>data.model_stats.filter(r=>r.scope===scope&&(!dat
 test('English results, simplified layout, routing tables and metrics',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');
-  await expect(page.locator('#model-table tbody tr')).toHaveCount(rowsFor('formal').length);
+  await expect(page.locator('#model-tables tbody tr')).toHaveCount(rowsFor('formal').length);
   await expect(page.locator('.model-window')).toHaveCount(4);
   await expect(page.locator('.dataset-bar-row')).toHaveCount(rowsFor('formal').length);
   await page.locator('#model-details summary').click();
@@ -20,9 +20,13 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   await expect(page.locator('.overview-stat').first()).toContainText('total-task');
   await expect(page.locator('.overview-stat .stat-value').first()).toHaveText(total.toLocaleString('en-US'));
   await page.locator('#model-metric').selectOption('mean_output_tokens');
-  await page.locator('[data-model-sort=accuracy]').click();
-  const accuracy=await page.locator('#model-table tbody td:nth-child(2)').allTextContents();
-  expect(parseFloat(accuracy[0])).toBeGreaterThanOrEqual(parseFloat(accuracy.at(-1)));
+  await page.locator('[data-model-sort=accuracy]').first().click();
+  await expect(page.locator('.model-dataset-panel')).toHaveCount(data.datasets.length);
+  for(const panel of await page.locator('.model-dataset-panel').all()){
+    await expect(panel.locator('tbody tr')).toHaveCount(4);
+    const accuracy=await panel.locator('tbody td:nth-child(2)').allTextContents();
+    expect(parseFloat(accuracy[0])).toBeGreaterThanOrEqual(parseFloat(accuracy.at(-1)));
+  }
   await page.locator('#routing-dataset').selectOption('ds1000');
   await expect(page.locator('#routing-tables tbody tr')).toHaveCount(4);
   const dsTasks=data.routing.metrics.find(r=>r.dataset==='ds1000').tasks.toLocaleString('en-US');
@@ -60,7 +64,7 @@ test('network errors are visible and recoverable',async({page})=>{
   await page.route('**/assets/data.json*',r=>r.fulfill({status:503,body:'unavailable'}));
   await page.goto('/');await expect(page.locator('#error')).toBeVisible();
   await page.unroute('**/assets/data.json*');await page.locator('#refresh').click();
-  await expect(page.locator('#error')).toBeHidden();await expect(page.locator('#model-table tbody tr')).toHaveCount(rowsFor('formal').length);
+  await expect(page.locator('#error')).toBeHidden();await expect(page.locator('#model-tables tbody tr')).toHaveCount(rowsFor('formal').length);
 });
 
 test('model windows share scales and retain costs, tokens and coverage',async({page})=>{

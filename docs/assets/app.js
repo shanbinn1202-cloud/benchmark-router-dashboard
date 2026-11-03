@@ -93,12 +93,19 @@ function renderModels() {
     </article>`;
   }).join('')||'<div class="empty">No matching results.</div>';
   $('#model-table-caption').textContent=`${rows.length} rows · All results`;
-  $('#model-table tbody').innerHTML=order(rows,modelSort).map(r=>{
+  const renderRow=r=>{
     const partial=r.cost_tasks<r.graded, tokenPartial=r.token_tasks<r.graded;
     const costNote=partial?`<span class="coverage">Complete: ${r.cost_tasks}/${r.graded}</span>`:'';
     const tokenNote=tokenPartial?`<span class="coverage">Coverage: ${r.token_tasks}/${r.graded}</span>`:'';
-    return `<tr><td><span class="cell-title">${esc(dsLabel(r.dataset))}</span><span class="cell-sub"><span class="model-dot" style="background:${colors[r.model]};width:5px;height:5px;margin-right:5px"></span>${esc(modelLabel(r.model))}</span></td><td class="num cell-value">${pct(r.accuracy)}</td><td class="num">${r.passed} / ${r.graded}${r.ungraded?`<span class="cell-sub">${r.running?`${r.running} running`:`${r.ungraded} ungraded`} · ${r.planned} total</span>`:''}</td><td class="num">${partial?'≥ ':''}${f(partial?r.known_cost_usd:r.raw_cost_usd,4)}${costNote}</td><td class="num">${f(r.mean_cost_usd,6)}</td><td class="num">${f(r.normalized_cost_mean,4)}</td><td class="num" title="${integer(r.mean_input_tokens)}">${integer(r.mean_input_tokens)}</td><td class="num" title="${integer(r.mean_output_tokens)}">${integer(r.mean_output_tokens)}</td><td class="num cell-value">${integer(r.mean_total_tokens)}${tokenNote}</td></tr>`;
-  }).join('') || '<tr><td colspan="9" class="empty">No matching results.</td></tr>';
+    return `<tr><td><span><span class="model-dot" style="background:${colors[r.model]};width:5px;height:5px;margin-right:5px"></span>${esc(modelLabel(r.model))}</span></td><td class="num cell-value">${pct(r.accuracy)}</td><td class="num">${r.passed} / ${r.graded}${r.ungraded?`<span class="cell-sub">${r.running?`${r.running} running`:`${r.ungraded} ungraded`} · ${r.planned} total</span>`:''}</td><td class="num">${partial?'≥ ':''}${f(partial?r.known_cost_usd:r.raw_cost_usd,4)}${costNote}</td><td class="num">${f(r.mean_cost_usd,6)}</td><td class="num">${f(r.normalized_cost_mean,4)}</td><td class="num" title="${integer(r.mean_input_tokens)}">${integer(r.mean_input_tokens)}</td><td class="num" title="${integer(r.mean_output_tokens)}">${integer(r.mean_output_tokens)}</td><td class="num cell-value">${integer(r.mean_total_tokens)}${tokenNote}</td></tr>`;
+  };
+  $('#model-tables').innerHTML=datasetOrder.filter(id=>rows.some(r=>r.dataset===id)).map(id=>{
+    const datasetRows=order(rows.filter(r=>r.dataset===id),modelSort);
+    return `<article class="panel model-dataset-panel" data-dataset="${esc(id)}"><div class="table-top"><h3>${esc(dsLabel(id))}</h3><span>${datasetRows.length} models</span></div><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(dsLabel(id))} model statistics"><table><caption class="sr-only">${esc(dsLabel(id))} model results</caption><thead><tr>
+        <th>Model</th><th class="num sortable" data-model-sort="accuracy" tabindex="0" role="button">Accuracy ↕</th><th class="num">Pass / Graded</th><th class="num sortable" data-model-sort="raw_cost_usd" tabindex="0" role="button">Cost, USD ↕</th><th class="num">USD / task</th><th class="num sortable" data-model-sort="normalized_cost_mean" tabindex="0" role="button">Norm. cost / task ↕</th><th class="num">Input / task</th><th class="num">Output / task</th><th class="num sortable" data-model-sort="mean_total_tokens" tabindex="0" role="button">Tokens / task ↕</th>
+      </tr></thead><tbody>${datasetRows.map(renderRow).join('')}</tbody></table></div></article>`;
+  }).join('');
+  bindSort('[data-model-sort]','modelSort',()=>modelSort,v=>modelSort=v,renderModels);
 }
 
 function routeSummary() {
@@ -160,5 +167,4 @@ function bindSort(selector,key,readState,setState,render) { $$(selector).forEach
   const run=()=>{const current=readState();setState({key:el.dataset[key],direction:current?.key===el.dataset[key]?-current.direction:-1});render();};
   el.addEventListener('click',run);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run();}});
 });}
-bindSort('[data-model-sort]','modelSort',()=>modelSort,v=>modelSort=v,renderModels);
 load();setInterval(load,300000);
