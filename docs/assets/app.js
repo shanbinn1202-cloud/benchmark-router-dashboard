@@ -120,10 +120,10 @@ function routeSummary() {
   return methods.filter(method=>data.routing.means.some(r=>r.method===method)).map(method=>{
     if(ds==='all') {
       const r=data.routing.means.find(r=>r.method===method);
-      return {method,perf:r?.mean_perf_per_cost,f1:r?.mean_macro_f1,datasets:r?.datasets};
+      return {method,perf:r?.mean_perf_per_cost,f1:r?.mean_classification_accuracy,datasets:r?.datasets};
     }
     const r=data.routing.metrics.find(r=>r.dataset===ds&&r.method===method);
-    return {method,perf:r?.perf_per_cost,f1:r?.macro_f1,datasets:1};
+    return {method,perf:r?.perf_per_cost,f1:r?.classification_accuracy,datasets:1};
   });
 }
 
@@ -142,7 +142,7 @@ function renderRouting() {
     methodsText[3].textContent=`Uses task and candidate information, training-fold performance memory and exploration. Up to ${data.routing.agent_workers??256} requests share a frozen memory snapshot; selected-model feedback updates memory only after the entire batch finishes. This is a batched adaptation of the sequential GitHub agent.`;
     const metricText=$('#routing-metrics').querySelectorAll('p');
     metricText[0].innerHTML='For method m and dataset d: P<sub>md</sub> = passed / N<sub>d</sub>; C<sub>md</sub> = (solver USD + router USD) / N<sub>d</sub>; S<sub>md</sub> = P<sub>md</sub> / C<sub>md</sub>. Per-dataset scores use raw USD.<br><br>Dataset mean trajectory cost: <strong>μ<sub>d</sub> = Σ<sub>i=1…Nᵈ</sub>Σ<sub>k=1…4</sub> c<sub>dik</sub> / (4N<sub>d</sub>)</strong>. With D = 8 datasets, <strong>w<sub>d</sub> = μ<sub>d</sub> / D</strong> and the overall score is <strong>S̄<sub>m</sub> = Σ<sub>d</sub> w<sub>d</sub>S<sub>md</sub></strong>. The same weights apply to every method; μ includes all candidate-model solver trajectories and excludes router fees. Weights are used directly, without dividing by their sum; they need not sum to one.';
-    metricText[1].textContent='Ground truth is the cheapest successful model for each task, or the cheapest model if all fail; exact cost ties use alphabetical model aliases. Macro-F1 averages F1 equally over the four candidate labels. The overall Macro-F1 is the unweighted arithmetic mean across all eight datasets.';
+    metricText[1].textContent='Ground truth is the cheapest successful model for each task, or the cheapest model if all fail; exact cost ties use alphabetical model aliases. Routing accuracy = matching best-model selections / tasks. This measures model-selection accuracy, not solver completion rate. Overall routing accuracy is the unweighted arithmetic mean across all eight datasets.';
   }
   const ds=$('#routing-dataset').value, rows=routeSummary();
   const equal=ds==='all';
@@ -153,7 +153,7 @@ function renderRouting() {
     const datasetRows=order(filtered.filter(r=>r.dataset===d.id),routeSort);
     const bestValue=key=>Math.max(...datasetRows.map(r=>r[key]).filter(valid).map(Number));
     const isBest=(r,key)=>valid(r[key])&&Number(r[key])===bestValue(key);
-    return `<article class="panel routing-dataset-panel" data-dataset="${esc(d.id)}"><div class="table-top"><h3>${esc(d.label)}</h3><span>${integer(datasetRows[0].tasks)} tasks${weighted?' · weight '+f(Number(data.routing.dataset_weights[d.id]),6):''}</span></div><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(d.label)} routing statistics"><table><caption class="sr-only">${esc(d.label)} routing results</caption><thead><tr><th>Method</th><th class="num">Tasks</th><th class="num sortable" data-route-sort="performance" tabindex="0" role="button">Completion rate ↕</th><th class="num">Solver, USD</th><th class="num sortable" data-route-sort="perf_per_cost" tabindex="0" role="button">Perf / Cost ↕</th><th class="num sortable" data-route-sort="macro_f1" tabindex="0" role="button">Macro-F1 ↕</th></tr></thead><tbody>${datasetRows.map(r=>`<tr><td>${esc(r.method)}</td><td class="num">${integer(r.tasks)}</td><td class="num">${pct(r.performance)}</td><td class="num">${f(r.raw_backend_cost_usd,4)}</td><td class="num${isBest(r,'perf_per_cost')?' cell-value':''}">${f(r.perf_per_cost,3)}</td><td class="num${isBest(r,'macro_f1')?' cell-value':''}">${f(r.macro_f1,4)}</td></tr>`).join('')}</tbody></table></div></article>`;
+    return `<article class="panel routing-dataset-panel" data-dataset="${esc(d.id)}"><div class="table-top"><h3>${esc(d.label)}</h3><span>${integer(datasetRows[0].tasks)} tasks${weighted?' · weight '+f(Number(data.routing.dataset_weights[d.id]),6):''}</span></div><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(d.label)} routing statistics"><table><caption class="sr-only">${esc(d.label)} routing results</caption><thead><tr><th>Method</th><th class="num">Tasks</th><th class="num sortable" data-route-sort="performance" tabindex="0" role="button">Completion rate ↕</th><th class="num">Solver, USD</th><th class="num sortable" data-route-sort="perf_per_cost" tabindex="0" role="button">Perf / Cost ↕</th><th class="num sortable" data-route-sort="classification_accuracy" tabindex="0" role="button">Routing accuracy ↕</th></tr></thead><tbody>${datasetRows.map(r=>`<tr><td>${esc(r.method)}</td><td class="num">${integer(r.tasks)}</td><td class="num">${pct(r.performance)}</td><td class="num">${f(r.raw_backend_cost_usd,4)}</td><td class="num${isBest(r,'perf_per_cost')?' cell-value':''}">${f(r.perf_per_cost,3)}</td><td class="num${isBest(r,'classification_accuracy')?' cell-value':''}">${f(r.classification_accuracy,4)}</td></tr>`).join('')}</tbody></table></div></article>`;
   }).join('');
   bindSort('[data-route-sort]','routeSort',()=>routeSort,v=>routeSort=v,renderRouting);
   $('#legend').innerHTML=data.models.map(m=>`<span><i class="model-dot" style="background:${colors[m.id]}"></i>${esc(m.id==='deepseek'?'DeepSeek':m.id[0].toUpperCase()+m.id.slice(1))}</span>`).join('');

@@ -3,7 +3,7 @@
 [Live dashboard](https://shanbinn1202-cloud.github.io/benchmark-router-dashboard/) · Static HTML, CSS and JavaScript. The page makes no model API calls.
 
 - **Models:** one panel per model with dataset bar charts, shared metric scales, and an expandable full data table. Includes accuracy, raw/normalized cost and mean input/output/total tokens.
-- **Routing:** Random, pooled KNN, Zero-shot LLM and Agent-as-a-Router; Perf/Cost, Macro-F1, costs and model selections.
+- **Routing:** Random, pooled KNN, Zero-shot LLM and Agent-as-a-Router; Perf/Cost, Routing accuracy, costs and model selections.
 - Dataset filters, sortable tables, CSV/JSON exports and responsive layouts.
 
 ## Metrics
@@ -14,7 +14,7 @@ Costs are min–max normalized per dataset across task × model records: `(cost 
 
 Tokens are summed across calls within each selected attempt, then averaged over graded tasks with complete usage. Local runs use frozen provider prices; API runs use actual charges, including billed retries. Replaced attempts are excluded.
 
-**Perf/Cost** = accuracy / mean normalized total cost (solver + router). **Macro-F1** uses four fixed model labels. Overall metrics are unweighted means across datasets. The best-model label is the cheapest correct model, or the cheapest model if all fail.
+**Perf/Cost** = completion rate / mean raw USD cost (solver + router). **Routing accuracy** is the fraction of selections matching the best-model label. Overall Perf/Cost is the sum of dataset scores times mean candidate-trajectory cost / dataset count, without renormalizing weights. Overall routing accuracy is an unweighted dataset mean. The best-model label is the cheapest correct model, or the cheapest model if all fail.
 
 Terminal deadlocks, client timeouts and verifier timeouts count as failures under the experiment policy. Agent uses evaluation feedback; these results compare configured pipelines rather than strictly reproducing every paper setting.
 

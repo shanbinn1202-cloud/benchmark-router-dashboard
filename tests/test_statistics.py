@@ -58,11 +58,11 @@ class StatisticsTests(unittest.TestCase):
     def test_mean_cost_weights_are_not_renormalized(self):
         module=exporter.load_module('test_cost_aggregation',exporter.BASE/'all_datasets/cost_aggregation.py')
         tasks=[{'dataset':ds,'outcomes':{m:{'cost_usd':str(cost)} for m in ('qwen','gemma','muse','deepseek')}} for ds,cost in [('a',2),('b',8)]]
-        rows=[{'method':'Random','dataset':ds,'perf_per_cost':score,'perf_per_cost_status':'finite','macro_f1':f1} for ds,score,f1 in [('a',10,.2),('b',20,.6)]]
+        rows=[{'method':'Random','dataset':ds,'perf_per_cost':score,'perf_per_cost_status':'finite','classification_accuracy':f1} for ds,score,f1 in [('a',10,.2),('b',20,.6)]]
         means,averages=module.aggregate(rows,tasks)
         self.assertEqual(means[0]['dataset_weights'],{'a':'1','b':'4'})
         self.assertEqual(means[0]['mean_perf_per_cost'],90)
-        self.assertAlmostEqual(means[0]['mean_macro_f1'],.4)
+        self.assertAlmostEqual(means[0]['mean_classification_accuracy'],.4)
         self.assertEqual(averages,{'a':'2','b':'8'})
         tasks[0]['outcomes']={m:{'cost_usd':'0'} for m in tasks[0]['outcomes']}
         with self.assertRaises(ValueError):module.aggregate(rows,tasks)
@@ -78,7 +78,7 @@ class StatisticsTests(unittest.TestCase):
             weights=mean.get('dataset_weights')
             expected=sum(r['perf_per_cost']*float(weights[r['dataset']]) for r in rows) if weights else sum(r['perf_per_cost'] for r in rows)/len(rows)
             self.assertAlmostEqual(expected,mean['mean_perf_per_cost'])
-            self.assertAlmostEqual(sum(r['macro_f1'] for r in rows)/len(rows),mean['mean_macro_f1'])
+            self.assertAlmostEqual(sum(r['classification_accuracy'] for r in rows)/len(rows),mean['mean_classification_accuracy'])
             counts=[r['count'] for r in d['routing']['choices'] if r['method']==mean['method']]
             self.assertEqual(sum(counts),d['routing']['tasks'])
         for r in d['model_stats']:

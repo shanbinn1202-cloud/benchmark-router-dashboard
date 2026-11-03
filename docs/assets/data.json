@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T13:04:38.600977+00:00",
+  "updated_at": "2026-11-03T13:09:45.416402+00:00",
   "models": [
     {
       "id": "qwen",
@@ -2183,6 +2183,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "4.932046380",
         "metric_cost": "0.01233011595",
+        "classification_correct": 97,
+        "classification_accuracy": 0.2425,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2200,6 +2202,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.107937760",
         "metric_cost": "0.0007293091891891891891891891892",
+        "classification_correct": 29,
+        "classification_accuracy": 0.19594594594594594,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2217,6 +2221,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.291059152",
         "metric_cost": "0.000291059152",
+        "classification_correct": 238,
+        "classification_accuracy": 0.238,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2234,6 +2240,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.560387211",
         "metric_cost": "0.002075508188888888888888888889",
+        "classification_correct": 71,
+        "classification_accuracy": 0.26296296296296295,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2251,6 +2259,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.541682167",
         "metric_cost": "0.008463783859375",
+        "classification_correct": 13,
+        "classification_accuracy": 0.203125,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2268,6 +2278,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "102.96493766548",
         "metric_cost": "1.072551434015416666666666667",
+        "classification_correct": 28,
+        "classification_accuracy": 0.2916666666666667,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2285,6 +2297,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "29.72506015552",
         "metric_cost": "0.3339894399496629213483146067",
+        "classification_correct": 18,
+        "classification_accuracy": 0.20224719101123595,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2302,6 +2316,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.085218020",
         "metric_cost": "0.0005462693589743589743589743590",
+        "classification_correct": 31,
+        "classification_accuracy": 0.1987179487179487,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2319,6 +2335,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "2.17356565",
         "metric_cost": "0.005433914125",
+        "classification_correct": 243,
+        "classification_accuracy": 0.6075,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2336,6 +2354,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.03935121",
         "metric_cost": "0.0002658865540540540540540540541",
+        "classification_correct": 104,
+        "classification_accuracy": 0.7027027027027027,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2353,6 +2373,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.084040216",
         "metric_cost": "0.000084040216",
+        "classification_correct": 609,
+        "classification_accuracy": 0.609,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2370,6 +2392,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.220973162",
         "metric_cost": "0.0008184191185185185185185185185",
+        "classification_correct": 180,
+        "classification_accuracy": 0.6666666666666666,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2387,6 +2411,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.172053698",
         "metric_cost": "0.00268833903125",
+        "classification_correct": 31,
+        "classification_accuracy": 0.484375,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2404,6 +2430,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "27.5303114664799999995",
         "metric_cost": "0.286774077775833333328125",
+        "classification_correct": 52,
+        "classification_accuracy": 0.5416666666666666,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2421,6 +2449,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "4.75643275896",
         "metric_cost": "0.05344306470741573033707865169",
+        "classification_correct": 52,
+        "classification_accuracy": 0.5842696629213483,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2438,6 +2468,8 @@
         "raw_router_cost_usd": "0",
         "raw_total_cost_usd": "0.022128204",
         "metric_cost": "0.0001418474615384615384615384615",
+        "classification_correct": 115,
+        "classification_accuracy": 0.7371794871794872,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2455,6 +2487,8 @@
         "raw_router_cost_usd": "0.04598050632",
         "raw_total_cost_usd": "5.35140687632",
         "metric_cost": "0.0133785171908",
+        "classification_correct": 89,
+        "classification_accuracy": 0.2225,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2472,6 +2506,8 @@
         "raw_router_cost_usd": "0.00562245208",
         "raw_total_cost_usd": "0.07641225208",
         "metric_cost": "0.0005162990005405405405405405405",
+        "classification_correct": 29,
+        "classification_accuracy": 0.19594594594594594,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2489,6 +2525,8 @@
         "raw_router_cost_usd": "0.04718663936",
         "raw_total_cost_usd": "0.13238838136",
         "metric_cost": "0.00013238838136",
+        "classification_correct": 533,
+        "classification_accuracy": 0.533,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2506,6 +2544,8 @@
         "raw_router_cost_usd": "0.02420179384",
         "raw_total_cost_usd": "1.23405917084",
         "metric_cost": "0.004570589521629629629629629630",
+        "classification_correct": 43,
+        "classification_accuracy": 0.15925925925925927,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2523,6 +2563,8 @@
         "raw_router_cost_usd": "0.00553077896",
         "raw_total_cost_usd": "0.16626123996",
         "metric_cost": "0.002597831874375",
+        "classification_correct": 36,
+        "classification_accuracy": 0.5625,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2540,6 +2582,8 @@
         "raw_router_cost_usd": "0.00517997816",
         "raw_total_cost_usd": "111.8394664761599999995",
         "metric_cost": "1.164994442459999999994791667",
+        "classification_correct": 52,
+        "classification_accuracy": 0.5416666666666666,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2557,6 +2601,8 @@
         "raw_router_cost_usd": "0.00453027344",
         "raw_total_cost_usd": "270.22141740432",
         "metric_cost": "3.036195701172134831460674157",
+        "classification_correct": 57,
+        "classification_accuracy": 0.6404494382022472,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2574,6 +2620,8 @@
         "raw_router_cost_usd": "0.00686615440",
         "raw_total_cost_usd": "0.02929520840",
         "metric_cost": "0.0001877897974358974358974358974",
+        "classification_correct": 55,
+        "classification_accuracy": 0.3525641025641026,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2591,6 +2639,8 @@
         "raw_router_cost_usd": "0.04162771088",
         "raw_total_cost_usd": "0.88165584588",
         "metric_cost": "0.0022041396147",
+        "classification_correct": 266,
+        "classification_accuracy": 0.665,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2608,6 +2658,8 @@
         "raw_router_cost_usd": "0.00591754576",
         "raw_total_cost_usd": "0.07852878576",
         "metric_cost": "0.0005305999037837837837837837838",
+        "classification_correct": 30,
+        "classification_accuracy": 0.20270270270270271,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2625,6 +2677,8 @@
         "raw_router_cost_usd": "0.04156878544",
         "raw_total_cost_usd": "0.13694381244",
         "metric_cost": "0.00013694381244",
+        "classification_correct": 541,
+        "classification_accuracy": 0.541,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2642,6 +2696,8 @@
         "raw_router_cost_usd": "0.02741523736",
         "raw_total_cost_usd": "0.42952554136",
         "metric_cost": "0.001590835338370370370370370370",
+        "classification_correct": 43,
+        "classification_accuracy": 0.15925925925925927,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2659,6 +2715,8 @@
         "raw_router_cost_usd": "0.00604120216",
         "raw_total_cost_usd": "0.24209402316",
         "metric_cost": "0.003782719111875",
+        "classification_correct": 22,
+        "classification_accuracy": 0.34375,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2676,6 +2734,8 @@
         "raw_router_cost_usd": "0.00469973896",
         "raw_total_cost_usd": "271.49527947896",
         "metric_cost": "2.828075827905833333333333333",
+        "classification_correct": 6,
+        "classification_accuracy": 0.0625,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2693,6 +2753,8 @@
         "raw_router_cost_usd": "0.00437840872",
         "raw_total_cost_usd": "41.74759103708",
         "metric_cost": "0.4690740565964044943820224719",
+        "classification_correct": 69,
+        "classification_accuracy": 0.7752808988764045,
         "cost_basis": "raw_total_usd_per_task"
       },
       {
@@ -2710,6 +2772,8 @@
         "raw_router_cost_usd": "0.00696672200",
         "raw_total_cost_usd": "0.03974633100",
         "metric_cost": "0.0002547841730769230769230769231",
+        "classification_correct": 49,
+        "classification_accuracy": 0.3141025641025641,
         "cost_basis": "raw_total_usd_per_task"
       }
     ],
@@ -2719,7 +2783,7 @@
         "datasets": 8,
         "mean_perf_per_cost": 0.520610022678347,
         "mean_perf_per_cost_status": "finite",
-        "mean_macro_f1": 0.1709975198428628,
+        "mean_classification_accuracy": 0.22939571441309503,
         "dataset_weights": {
           "aethercode": "0.00160633486796875",
           "bigcodebench_hard": "0.00009160687394425675675675675676",
@@ -2730,7 +2794,7 @@
           "verilogeval": "0.00007205488461538461538461538461",
           "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Classification accuracy is an unweighted dataset mean.",
         "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       },
@@ -2739,7 +2803,7 @@
         "datasets": 8,
         "mean_perf_per_cost": 2.8377876292955713,
         "mean_perf_per_cost_status": "finite",
-        "mean_macro_f1": 0.2612024236238134,
+        "mean_classification_accuracy": 0.616670023267109,
         "dataset_weights": {
           "aethercode": "0.00160633486796875",
           "bigcodebench_hard": "0.00009160687394425675675675675676",
@@ -2750,7 +2814,7 @@
           "verilogeval": "0.00007205488461538461538461538461",
           "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Classification accuracy is an unweighted dataset mean.",
         "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       },
@@ -2759,7 +2823,7 @@
         "datasets": 8,
         "mean_perf_per_cost": 0.8087323805456658,
         "mean_perf_per_cost_status": "finite",
-        "mean_macro_f1": 0.17093069364148036,
+        "mean_classification_accuracy": 0.4009856765797777,
         "dataset_weights": {
           "aethercode": "0.00160633486796875",
           "bigcodebench_hard": "0.00009160687394425675675675675676",
@@ -2770,7 +2834,7 @@
           "verilogeval": "0.00007205488461538461538461538461",
           "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Classification accuracy is an unweighted dataset mean.",
         "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       },
@@ -2779,7 +2843,7 @@
         "datasets": 8,
         "mean_perf_per_cost": 1.0941794043322999,
         "mean_perf_per_cost_status": "finite",
-        "mean_macro_f1": 0.16129585893732357,
+        "mean_classification_accuracy": 0.38294942811761634,
         "dataset_weights": {
           "aethercode": "0.00160633486796875",
           "bigcodebench_hard": "0.00009160687394425675675675675676",
@@ -2790,7 +2854,7 @@
           "verilogeval": "0.00007205488461538461538461538461",
           "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Classification accuracy is an unweighted dataset mean.",
         "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       }
@@ -3422,7 +3486,7 @@
     "cost": "Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.",
     "normalization": "c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.",
     "tokens": "Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. For interrupted Terminal-Bench requests, input is reconstructed with the model tokenizer and output uses only saved token counts, as authorized by the user. Unavailable output is excluded, not estimated. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.",
-    "routing": "Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Macro-F1 is an unweighted dataset mean.",
+    "routing": "Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Classification accuracy is an unweighted dataset mean.",
     "labels": "The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.",
     "methods": "KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.",
     "comparison": "Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction."

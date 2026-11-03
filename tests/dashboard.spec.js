@@ -66,7 +66,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
       await expect(row.locator('td').nth(3)).toHaveText(Number(r.raw_backend_cost_usd).toLocaleString('en-US',{minimumFractionDigits:4,maximumFractionDigits:4}));
     }
   }
-  await page.locator('[data-route-sort=macro_f1]').first().click();
+  await page.locator('[data-route-sort=classification_accuracy]').first().click();
   await expect(page.locator('#model-tables details, #routing-tables details')).toHaveCount(0);
   for(const table of await page.locator('#model-tables table, #routing-tables table').all())await expect(table).toBeVisible();
   const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));

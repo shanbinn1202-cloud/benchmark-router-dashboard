@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f1f4f8">
-  <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Macro-F1.">
+  <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Routing accuracy.">
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css?v=20261103-visible-tables">
-  <script src="assets/app.js?v=20261103-mean-cost-weight" defer></script>
+  <script src="assets/app.js?v=20261103-routing-accuracy" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -42,14 +42,14 @@
       <h3 id="routing-metrics-title">Evaluation metrics</h3>
       <div class="routing-guide" id="routing-metrics">
       <div><h4>Perf / Cost</h4><p>Perf / Cost divides the successful completion rate by mean raw cost per task in USD, including solver and router calls. Costs are not normalized. Overall Perf / Cost is the unweighted mean of the per-dataset scores.</p></div>
-      <div><h4>Macro-F1</h4><p>Compares routing choices against each task’s ground-truth label: the cheapest successful model, or the cheapest model if all fail (cost ties use alphabetical model aliases). F1 is averaged equally over the four model labels; both headline metrics are then averaged equally across datasets.</p></div>
+      <div><h4>Routing accuracy</h4><p>Compares routing choices against each task’s ground-truth label: the cheapest successful model, or the cheapest model if all fail (cost ties use alphabetical model aliases). Routing accuracy = selections matching the ground-truth label / tasks. Overall routing accuracy is the unweighted mean across datasets.</p></div>
       </div>
     </section>
     <p id="routing-progress" class="section-note"></p>
     <div class="routing-topline"><span id="routing-coverage"></span><label class="sr-only" for="routing-dataset">Routing dataset</label><select id="routing-dataset"></select></div>
     <div class="chart-grid">
       <div class="panel chart-panel"><div class="chart-heading"><h3>Perf / Cost</h3><span>Higher is better</span></div><div id="efficiency-chart" class="bar-chart"></div></div>
-      <div class="panel chart-panel"><div class="chart-heading"><h3>Macro-F1</h3><span>Higher is better</span></div><div id="f1-chart" class="bar-chart"></div></div>
+      <div class="panel chart-panel"><div class="chart-heading"><h3>Routing accuracy</h3><span>Higher is better</span></div><div id="f1-chart" class="bar-chart"></div></div>
     </div>
     <div class="panel selection-panel"><div class="chart-heading"><h3>Model selection</h3><div class="legend" id="legend"></div></div><div id="selection-chart"></div></div>
     <div id="routing-tables" class="routing-tables"></div>

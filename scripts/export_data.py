@@ -226,6 +226,16 @@ def routing_data(stage, summary, cohort=None):
     metrics = [{k: r.get(k) for k in ('method','dataset','tasks','passed','performance','perf_per_cost',
         'perf_per_cost_status','macro_f1','micro_f1','weighted_f1','raw_backend_cost_usd',
         'raw_router_cost_usd','raw_total_cost_usd','metric_cost')} for r in summary['dataset_metrics']]
+    # Compute exact best-model matches directly from saved decisions; no API calls.
+    if cohort is None: cohort = lines(stage/'cohort/tasks.jsonl')
+    labels = {task['uid']: task['best_model'] for task in cohort}
+    decisions = lines(stage/'routes.jsonl')
+    for row in metrics:
+        selected = [r for r in decisions if r['method'] == row['method'] and r['dataset'] == row['dataset']]
+        if len(selected) != row['tasks'] or len({r['uid'] for r in selected}) != row['tasks']:
+            raise ValueError('Routing accuracy requires exactly one decision per task')
+        row['classification_correct'] = sum(r['selected_model'] == labels[r['uid']] for r in selected)
+        row['classification_accuracy'] = row['classification_correct'] / row['tasks']
     metrics = [raw_cost_metric(row) for row in metrics]
     means = []
     for original in summary['dataset_arithmetic_means']:
@@ -255,7 +265,8 @@ def routing_data(stage, summary, cohort=None):
             if original.get('aggregation_version') != aggregation:
                 archive = stage/'summary-before-mean-cost-weights.json'
                 if not archive.exists(): archive.write_bytes(final_path.read_bytes())
-            original.update(aggregation_version=aggregation, dataset_arithmetic_means=means,
+            original.update(aggregation_version=aggregation, dataset_arithmetic_means=means, dataset_metrics=metrics,
+                primary_metrics=['perf_per_cost', 'classification_accuracy'],
                 dataset_mean_trajectory_cost_usd=dataset_mean_costs,
                 dataset_weight_formula='w_d = mean_{all task-model trajectories}(solver USD) / D',
                 mean_formula='sum_d w_d * (completion_rate_d / mean_raw_total_USD_d)',
@@ -397,7 +408,7 @@ def build():
             'cost':'Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.',
             'normalization':'c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.',
             'tokens':'Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. For interrupted Terminal-Bench requests, input is reconstructed with the model tokenizer and output uses only saved token counts, as authorized by the user. Unavailable output is excluded, not estimated. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
-            'routing': ('Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Macro-F1 is an unweighted dataset mean.' if routed['aggregation_version'] == 'raw_usd_mean_cost_weighted_v1' else 'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.'),
+            'routing': ('Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Classification accuracy is an unweighted dataset mean.' if routed['aggregation_version'] == 'raw_usd_mean_cost_weighted_v1' else 'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Classification accuracy measures exact matches to best-model labels. Overall metrics are unweighted means across datasets.'),
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
             'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.',
             'comparison':'Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction.'}}
