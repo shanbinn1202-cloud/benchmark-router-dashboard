@@ -76,9 +76,11 @@ function renderModels() {
     ? 'All graded results · Shared chart scale across models'
     : 'Common tasks for all four models · Frozen routing cost scale';
   const max=modelScale(rows,metric), metricLabel=$('#model-metric').selectedOptions[0].textContent;
+  const datasetOrder=data.datasets.map(d=>d.id).filter(id=>id!=='science');
+  datasetOrder.splice(datasetOrder.indexOf('verilogeval')+1,0,'science');
   const showModels=data.models.filter(m=>rows.some(r=>r.model===m.id));
   $('#model-chart').innerHTML=showModels.map(m=>{
-    const modelRows=rows.filter(r=>r.model===m.id);
+    const modelRows=rows.filter(r=>r.model===m.id).sort((a,b)=>datasetOrder.indexOf(a.dataset)-datasetOrder.indexOf(b.dataset));
     const values=modelRows.map(r=>modelMetricValue(r,metric)).filter(valid).map(Number);
     const aggregate=values.length?(metric==='raw_cost_usd'?values.reduce((a,b)=>a+b,0):mean(values)):null;
     const partial=r=>metric.includes('tokens')?r.token_tasks<r.graded:metric!=='accuracy'&&r.cost_tasks<r.graded;
