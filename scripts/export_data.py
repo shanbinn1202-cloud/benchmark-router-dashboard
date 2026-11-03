@@ -185,6 +185,8 @@ def summarize(cells, scope, scales=None):
                 norm = [(number(c['cost_usd'])-lo)/span if span else Decimal(0) for c in priced]
             ni = sum(c['_input'] for c in tokened); no = sum(c['_output'] for c in tokened)
             rows.append({'scope': scope, 'dataset': ds, 'model': model, 'planned': len(group),
+                'simulated_missing_input_cost_usd': str(sum((Decimal(c.get('simulated_missing_input_cost_usd', '0')) for c in graded), Decimal(0))),
+                'unknown_output_requests': sum(c.get('unknown_output_requests', 0) for c in graded),
                 'complete_cost_tasks': complete_cost_tasks, 'complete_token_tasks': complete_token_tasks,
                 'graded': len(graded), 'passed': sum(c['passed'] for c in graded),
                 'accuracy': sum(c['passed'] for c in graded)/len(graded) if graded else None,
