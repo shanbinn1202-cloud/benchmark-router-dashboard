@@ -65,7 +65,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
     await expect(panel.locator('thead')).not.toContainText('Router, USD');
     await expect(panel.locator('thead')).not.toContainText('Total, USD');
     for(const r of rows){
-      const row=panel.locator('tbody tr').filter({has:page.getByText(r.method,{exact:true})});
+      const row=panel.locator('tbody tr').filter({has:page.getByText(r.method === 'KNN' ? 'KNNRouter' : r.method,{exact:true})});
       await expect(row.locator('td').nth(3)).toHaveText(Number(r.raw_backend_cost_usd).toLocaleString('en-US',{minimumFractionDigits:4,maximumFractionDigits:4}));
     }
   }
@@ -128,7 +128,11 @@ test('range-weighted routing describes raw costs and batched feedback',async({pa
   await expect(page.locator('#routing-metrics')).toContainText('μd / D');
   await expect(page.locator('#routing-metrics')).toContainText('unweighted arithmetic mean');
   await expect(page.locator('#routing-methods')).toContainText('raw USD prices');
-  if(data.routing.agent_variant==='github_id_hierarchical_nested_adapted') {
+  if(data.routing.agent_variant==='online_llm_tools_memory_replay') {
+    await expect(page.locator('#routing-methods')).toContainText('DeepSeek selects a model');
+    await expect(page.locator('#routing-methods')).toContainText('original observe()');
+    await expect(page.locator('#routing-methods')).toContainText('32 independent causal streams');
+  } else if(data.routing.agent_variant==='github_id_hierarchical_nested_adapted') {
     await expect(page.locator('#routing-methods')).toContainText('grouped inner validation');
     await expect(page.locator('#routing-methods')).toContainText('no test-outcome feedback');
   } else if(data.routing.agent_variant==='github_id_default_hierarchical') {
