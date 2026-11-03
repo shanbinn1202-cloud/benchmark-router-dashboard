@@ -6,8 +6,8 @@
   <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Macro-F1.">
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=20261103-cards">
-  <script src="assets/app.js?v=20261103-clean-layout" defer></script>
+  <link rel="stylesheet" href="assets/style.css?v=20261103-routing-tables">
+  <script src="assets/app.js?v=20261103-routing-tables" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -15,12 +15,12 @@
   <a class="brand" href="#top">Coding Routing Benchmark</a>
 </div></header>
 <main id="main">
-  <div class="page-heading"><div><h1>Benchmark results</h1><div class="snapshot"><span id="snapshot-time">Loading data…</span><button id="refresh" class="icon-button" aria-label="Refresh data" title="Refresh published snapshot">↻</button></div></div><a class="download" href="assets/data.json" download="benchmark-router-data.json">Download JSON ↓</a></div>
+  <div class="page-heading"><div><h1>Benchmark results</h1><div class="snapshot"><span id="snapshot-time">Loading data…</span><button id="refresh" class="icon-button" aria-label="Refresh data" title="Refresh published snapshot">↻</button></div></div></div>
   <div id="error" class="error" role="alert" hidden></div>
   <section class="overview" aria-label="Benchmark overview" id="overview"></section>
 
   <section id="models" class="section">
-    <div class="section-heading"><h2><span class="section-number">01</span> Model performance</h2><a class="download" href="assets/models.csv" download>Model CSV ↓</a></div>
+    <div class="section-heading"><h2><span class="section-number">01</span> Model performance</h2></div>
     <div class="toolbar"><span class="scope-note" id="scope-note"></span><div class="filters"><label class="sr-only" for="model-metric">Chart metric</label><select id="model-metric"><option value="accuracy">Accuracy</option><option value="raw_cost_usd">Total cost (USD)</option><option value="mean_cost_usd">Mean cost (USD / task)</option><option value="normalized_cost_mean">Mean normalized cost</option><option value="mean_input_tokens">Mean input tokens</option><option value="mean_output_tokens">Mean output tokens</option><option value="mean_total_tokens">Mean total tokens</option></select></div></div>
     <div class="model-chart" id="model-chart" aria-label="Results by model"></div>
     <details class="model-details panel" id="model-details"><summary>Full data table <span id="model-table-caption"></span></summary>
@@ -32,18 +32,24 @@
   </section>
 
   <section id="routing" class="section">
-    <div class="section-heading"><h2><span class="section-number">02</span> Routing performance</h2><a class="download" href="assets/routers.csv" download>Routing CSV ↓</a></div>
+    <div class="section-heading"><h2><span class="section-number">02</span> Routing performance</h2></div>
+    <div class="routing-guide" aria-label="Routing methods and metrics">
+      <div><h3>Random</h3><p>Selects one of the four candidate models uniformly at random for each task.</p></div>
+      <div><h3>KNN</h3><p>Predicts a model from neighboring task embeddings, trained jointly across datasets with grouped five-fold evaluation. Training labels select the cheapest successful model, or the cheapest model if all fail.</p></div>
+      <div><h3>Zero-shot LLM</h3><p>Receives the full task prompt, available task metadata (dimension, difficulty, language and evaluation method), candidate model descriptions, and input/output token prices expressed on the dataset’s normalized cost scale. It selects a model without examples, task answers or correctness labels.</p></div>
+      <div><h3>Agent-as-a-Router</h3><p>Combines task and candidate information with training-fold performance memory and exploration. Memory is updated with the selected model’s benchmark score after each task group, so this is an online feedback evaluation.</p></div>
+      <div><h3>Perf / Cost</h3><p>Perf / Cost divides the successful completion rate (Perf) by mean per-task normalized cost, including solver costs and routing fees scaled by the same range. To align cost scales across datasets, solver costs use per-dataset min–max normalization across eligible task–model pairs: c′ = (c − min) / (max − min), mapping them to [0, 1].</p></div>
+      <div><h3>Macro-F1</h3><p>Compares routing choices against each task’s ground-truth label: the cheapest successful model, or the cheapest model if all fail (cost ties use alphabetical model aliases). F1 is averaged equally over the four model labels; both headline metrics are then averaged equally across datasets.</p></div>
+    </div>
     <div class="routing-topline"><span id="routing-coverage"></span><label class="sr-only" for="routing-dataset">Routing dataset</label><select id="routing-dataset"></select></div>
     <div class="chart-grid">
       <div class="panel chart-panel"><div class="chart-heading"><h3>Perf / Cost</h3><span>Higher is better</span></div><div id="efficiency-chart" class="bar-chart"></div></div>
       <div class="panel chart-panel"><div class="chart-heading"><h3>Macro-F1</h3><span>Higher is better</span></div><div id="f1-chart" class="bar-chart"></div></div>
     </div>
-    <p class="routing-note" id="routing-note"></p>
-    <div class="panel"><div class="table-top"><h3>Results by dataset</h3><span id="routing-row-count"></span></div><div class="table-wrap" tabindex="0" role="region" aria-label="Routing statistics"><table id="routing-table"><caption class="sr-only">Per-dataset routing evaluation</caption><thead><tr><th>Dataset / Method</th><th class="num">Tasks</th><th class="num sortable" data-route-sort="performance" tabindex="0" role="button">Accuracy ↕</th><th class="num">Solver, USD</th><th class="num">Router, USD</th><th class="num">Total, USD</th><th class="num">Norm. cost / task</th><th class="num sortable" data-route-sort="perf_per_cost" tabindex="0" role="button">Perf / Cost ↕</th><th class="num sortable" data-route-sort="macro_f1" tabindex="0" role="button">Macro-F1 ↕</th></tr></thead><tbody></tbody></table></div></div>
+    <div id="routing-tables" class="routing-tables"></div>
     <div class="panel selection-panel"><div class="chart-heading"><h3>Model selection</h3><div class="legend" id="legend"></div></div><div id="selection-chart"></div></div>
   </section>
 
-  <section id="methodology" class="section definitions"><details><summary>Metric definitions &amp; evaluation notes</summary><div class="method-grid" id="method-notes"></div></details></section>
   <footer><span>Coding Routing Benchmark</span><span id="footer-time"></span></footer>
 </main>
 </body></html>

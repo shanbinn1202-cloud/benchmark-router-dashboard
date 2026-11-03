@@ -124,8 +124,11 @@ function renderRouting() {
   $('#routing-coverage').textContent=`${Object.keys(data.routing.coverage).length} datasets · ${integer(data.routing.tasks)} common tasks`;
   bars('#efficiency-chart',rows,'perf');bars('#f1-chart',rows,'f1',1);
   const filtered=data.routing.metrics.filter(r=>equal||r.dataset===ds);
-  $('#routing-row-count').textContent=`${filtered.length} rows`;
-  $('#routing-table tbody').innerHTML=order(filtered,routeSort).map(r=>`<tr><td><span class="cell-title">${esc(dsLabel(r.dataset))}</span><span class="cell-sub">${esc(r.method)}</span></td><td class="num">${integer(r.tasks)}</td><td class="num cell-value">${pct(r.performance)}</td><td class="num">${f(r.raw_backend_cost_usd,4)}</td><td class="num">${f(r.raw_router_cost_usd,5)}</td><td class="num">${f(r.raw_total_cost_usd,4)}</td><td class="num">${f(r.metric_cost,4)}</td><td class="num cell-value">${f(r.perf_per_cost,3)}</td><td class="num">${f(r.macro_f1,4)}</td></tr>`).join('');
+  $('#routing-tables').innerHTML=data.datasets.filter(d=>filtered.some(r=>r.dataset===d.id)).map(d=>{
+    const datasetRows=order(filtered.filter(r=>r.dataset===d.id),routeSort);
+    return `<article class="panel routing-dataset-panel" data-dataset="${esc(d.id)}"><div class="table-top"><h3>${esc(d.label)}</h3><span>${integer(datasetRows[0].tasks)} tasks</span></div><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(d.label)} routing statistics"><table><caption class="sr-only">${esc(d.label)} routing results</caption><thead><tr><th>Method</th><th class="num">Tasks</th><th class="num sortable" data-route-sort="performance" tabindex="0" role="button">Completion rate ↕</th><th class="num">Solver, USD</th><th class="num">Norm. cost / task</th><th class="num sortable" data-route-sort="perf_per_cost" tabindex="0" role="button">Perf / Cost ↕</th><th class="num sortable" data-route-sort="macro_f1" tabindex="0" role="button">Macro-F1 ↕</th></tr></thead><tbody>${datasetRows.map(r=>`<tr><td class="cell-title">${esc(r.method)}</td><td class="num">${integer(r.tasks)}</td><td class="num cell-value">${pct(r.performance)}</td><td class="num">${f(r.raw_backend_cost_usd,4)}</td><td class="num">${f(r.metric_cost,4)}</td><td class="num cell-value">${f(r.perf_per_cost,3)}</td><td class="num">${f(r.macro_f1,4)}</td></tr>`).join('')}</tbody></table></div></article>`;
+  }).join('');
+  bindSort('[data-route-sort]','routeSort',()=>routeSort,v=>routeSort=v,renderRouting);
   $('#legend').innerHTML=data.models.map(m=>`<span><i class="model-dot" style="background:${colors[m.id]}"></i>${esc(m.id==='deepseek'?'DeepSeek':m.id[0].toUpperCase()+m.id.slice(1))}</span>`).join('');
   $('#selection-chart').innerHTML=methods.map(method=>{
     const choices=data.routing.choices.filter(r=>r.method===method&&(equal||r.dataset===ds));
@@ -135,14 +138,6 @@ function renderRouting() {
       return `<div tabindex="0" role="img" style="width:${total?n/total*100:0}%;background:${colors[m.id]}" title="${esc(modelLabel(m.id))}: ${n} / ${total} (${pct(total?n/total:0)})" aria-label="${esc(method+' selected '+modelLabel(m.id)+' '+n+' times')}"></div>`;
     }).join('')}</div><span>${integer(total)}</span></div>`;
   }).join('');
-  $('#routing-note').textContent=equal
-    ? 'Unweighted mean across datasets. Cost includes solver and router calls; F1 uses all four model labels.'
-    : `${dsLabel(ds)}. Cost includes solver and router calls; F1 uses all four model labels.`;
-}
-
-function notes() {
-  const labels={accuracy:'Accuracy',cost:'Raw cost',normalization:'Normalized cost',tokens:'Tokens',routing:'Routing metrics',labels:'Best-model labels',methods:'Methods',comparison:'Evaluation scope'};
-  $('#method-notes').innerHTML=Object.entries(labels).map(([k,label])=>`<div class="method-note"><h3>${label}</h3><p>${esc(data.notes[k])}</p></div>`).join('');
 }
 
 async function load() {
@@ -152,7 +147,7 @@ async function load() {
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const next=await r.json();
     if(next.schema_version!==1 || !Array.isArray(next.model_stats))throw new Error('Unsupported data format');
-    data=next;options();overview();renderModels();renderRouting();notes();$('#error').hidden=true;
+    data=next;options();overview();renderModels();renderRouting();$('#error').hidden=true;
   }catch(e){$('#error').hidden=false;$('#error').textContent='Unable to load data. Use the refresh button to retry. '+e.message;}
   finally{$('#refresh').disabled=false;}
 }
@@ -164,5 +159,4 @@ function bindSort(selector,key,readState,setState,render) { $$(selector).forEach
   el.addEventListener('click',run);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run();}});
 });}
 bindSort('[data-model-sort]','modelSort',()=>modelSort,v=>modelSort=v,renderModels);
-bindSort('[data-route-sort]','routeSort',()=>routeSort,v=>routeSort=v,renderRouting);
 load();setInterval(load,300000);

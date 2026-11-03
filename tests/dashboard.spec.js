@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 const data=require('../docs/assets/data.json');
 const rowsFor=(scope,dataset)=>data.model_stats.filter(r=>r.scope===scope&&(!dataset||r.dataset===dataset));
-test('English results, simplified layout, sorting and exports',async({page})=>{
+test('English results, simplified layout, routing tables and metrics',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');
   await expect(page.locator('#model-table tbody tr')).toHaveCount(rowsFor('formal').length);
@@ -9,7 +9,7 @@ test('English results, simplified layout, sorting and exports',async({page})=>{
   await expect(page.locator('.dataset-bar-row')).toHaveCount(rowsFor('formal').length);
   await page.locator('#model-details summary').click();
   await expect(page.locator('#efficiency-chart .bar-row')).toHaveCount(4);
-  await expect(page.locator('#routing-table tbody tr')).toHaveCount(data.routing.metrics.length);
+  await expect(page.locator('#routing-tables tbody tr')).toHaveCount(data.routing.metrics.length);
   await expect(page.locator('#error')).toBeHidden();
   await expect(page.locator('html')).toHaveAttribute('lang','en');
   expect(await page.locator('body').innerText()).not.toMatch(/[\u3400-\u9fff]/);
@@ -24,17 +24,28 @@ test('English results, simplified layout, sorting and exports',async({page})=>{
   const accuracy=await page.locator('#model-table tbody td:nth-child(2)').allTextContents();
   expect(parseFloat(accuracy[0])).toBeGreaterThanOrEqual(parseFloat(accuracy.at(-1)));
   await page.locator('#routing-dataset').selectOption('ds1000');
-  await expect(page.locator('#routing-table tbody tr')).toHaveCount(4);
+  await expect(page.locator('#routing-tables tbody tr')).toHaveCount(4);
   const dsTasks=data.routing.metrics.find(r=>r.dataset==='ds1000').tasks.toLocaleString('en-US');
   for(const row of await page.locator('.selection-row').allTextContents())expect(row).toContain(dsTasks);
   await page.locator('#routing-dataset').selectOption('all');
   const best=data.routing.means.reduce((a,b)=>a.mean_perf_per_cost>b.mean_perf_per_cost?a:b);
   await expect(page.locator('#efficiency-chart .bar-row').filter({has:page.locator('.best')})).toContainText(best.method);
-  await page.locator('#methodology summary').click();
-  await expect(page.locator('#method-notes')).toBeVisible();
-  expect(await page.locator('body').innerText()).not.toMatch(/[\u3400-\u9fff]/);
-  await page.locator('#methodology summary').click();
-  const csv=await page.request.get('/assets/models.csv');expect(csv.ok()).toBeTruthy();expect(await csv.text()).toContain('mean_total_tokens');
+  await expect(page.locator('a.download, a[download], #methodology, #method-notes')).toHaveCount(0);
+  await expect(page.locator('.routing-guide h3')).toHaveCount(6);
+  await expect(page.locator('.routing-guide')).toContainText('Training labels select the cheapest successful model');
+  await expect(page.locator('.routing-dataset-panel')).toHaveCount(new Set(data.routing.metrics.map(r=>r.dataset)).size);
+  for(const panel of await page.locator('.routing-dataset-panel').all()){
+    const dataset=await panel.getAttribute('data-dataset');
+    const rows=data.routing.metrics.filter(r=>r.dataset===dataset);
+    await expect(panel.locator('tbody tr')).toHaveCount(rows.length);
+    await expect(panel.locator('thead')).toContainText('Solver, USD');
+    await expect(panel.locator('thead')).not.toContainText('Router, USD');
+    await expect(panel.locator('thead')).not.toContainText('Total, USD');
+    for(const r of rows){
+      const row=panel.locator('tbody tr').filter({has:page.getByText(r.method,{exact:true})});
+      await expect(row.locator('td').nth(3)).toHaveText(Number(r.raw_backend_cost_usd).toLocaleString('en-US',{minimumFractionDigits:4,maximumFractionDigits:4}));
+    }
+  }
   const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));
   expect(width.scroll).toBeLessThanOrEqual(width.view+1);
   expect(errors).toEqual([]);
