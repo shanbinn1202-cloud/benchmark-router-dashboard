@@ -6,7 +6,7 @@
   <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Macro-F1.">
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=20261103-cool-gray">
+  <link rel="stylesheet" href="assets/style.css?v=20261103-separated-guides">
   <script src="assets/app.js?v=20261103-routing-tables" defer></script>
 </head>
 <body id="top">
@@ -33,14 +33,22 @@
 
   <section id="routing" class="section">
     <div class="section-heading"><h2><span class="section-number">02</span> Routing performance</h2></div>
-    <div class="routing-guide" aria-label="Routing methods and metrics">
-      <div><h3>Random</h3><p>Selects one of the four candidate models uniformly at random for each task.</p></div>
-      <div><h3>KNN</h3><p>Predicts a model from neighboring task embeddings, trained jointly across datasets with grouped five-fold evaluation. Training labels select the cheapest successful model, or the cheapest model if all fail.</p></div>
-      <div><h3>Zero-shot LLM</h3><p>Receives the full task prompt, available task metadata (dimension, difficulty, language and evaluation method), candidate model descriptions, and input/output token prices expressed on the dataset’s normalized cost scale. It selects a model without examples, task answers or correctness labels.</p></div>
-      <div><h3>Agent-as-a-Router</h3><p>Combines task and candidate information with training-fold performance memory and exploration. Memory is updated with the selected model’s benchmark score after each task group, so this is an online feedback evaluation.</p></div>
-      <div><h3>Perf / Cost</h3><p>Perf / Cost divides the successful completion rate (Perf) by mean per-task normalized cost, including solver costs and routing fees scaled by the same range. To align cost scales across datasets, solver costs use per-dataset min–max normalization across eligible task–model pairs: c′ = (c − min) / (max − min), mapping them to [0, 1].</p></div>
-      <div><h3>Macro-F1</h3><p>Compares routing choices against each task’s ground-truth label: the cheapest successful model, or the cheapest model if all fail (cost ties use alphabetical model aliases). F1 is averaged equally over the four model labels; both headline metrics are then averaged equally across datasets.</p></div>
-    </div>
+    <section class="guide-section" aria-labelledby="routing-methods-title">
+      <h3 id="routing-methods-title">Routing methods</h3>
+      <div class="routing-guide" id="routing-methods">
+      <div><h4>Random</h4><p>Selects one of the four candidate models uniformly at random for each task.</p></div>
+      <div><h4>KNN</h4><p>Predicts a model from neighboring task embeddings, trained jointly across datasets with grouped five-fold evaluation. Training labels select the cheapest successful model, or the cheapest model if all fail.</p></div>
+      <div><h4>Zero-shot LLM</h4><p>Receives the full task prompt, available task metadata (dimension, difficulty, language and evaluation method), candidate model descriptions, and input/output token prices expressed on the dataset’s normalized cost scale. It selects a model without examples, task answers or correctness labels.</p></div>
+      <div><h4>Agent-as-a-Router</h4><p>Combines task and candidate information with training-fold performance memory and exploration. Memory is updated with the selected model’s benchmark score after each task group, so this is an online feedback evaluation.</p></div>
+      </div>
+    </section>
+    <section class="guide-section" aria-labelledby="routing-metrics-title">
+      <h3 id="routing-metrics-title">Evaluation metrics</h3>
+      <div class="routing-guide" id="routing-metrics">
+      <div><h4>Perf / Cost</h4><p>Perf / Cost divides the successful completion rate (Perf) by mean per-task normalized cost, including solver costs and routing fees scaled by the same range. To align cost scales across datasets, solver costs use per-dataset min–max normalization across eligible task–model pairs: c′ = (c − min) / (max − min), mapping them to [0, 1].</p></div>
+      <div><h4>Macro-F1</h4><p>Compares routing choices against each task’s ground-truth label: the cheapest successful model, or the cheapest model if all fail (cost ties use alphabetical model aliases). F1 is averaged equally over the four model labels; both headline metrics are then averaged equally across datasets.</p></div>
+      </div>
+    </section>
     <div class="routing-topline"><span id="routing-coverage"></span><label class="sr-only" for="routing-dataset">Routing dataset</label><select id="routing-dataset"></select></div>
     <div class="chart-grid">
       <div class="panel chart-panel"><div class="chart-heading"><h3>Perf / Cost</h3><span>Higher is better</span></div><div id="efficiency-chart" class="bar-chart"></div></div>
