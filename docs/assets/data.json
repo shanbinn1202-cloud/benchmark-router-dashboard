@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T12:41:00.386401+00:00",
+  "updated_at": "2026-11-03T12:49:07.381595+00:00",
   "models": [
     {
       "id": "qwen",
@@ -3037,6 +3037,8 @@
         "count": 18
       }
     ],
+    "aggregation_version": "raw_usd_unweighted",
+    "dataset_weights": {},
     "snapshot_sha256": "5bebf6b535e187d1386e36ad16d9cd70b7457831148f5c037ad45ccc807a84ab",
     "method_version": "github_aligned",
     "includes_terminal": false

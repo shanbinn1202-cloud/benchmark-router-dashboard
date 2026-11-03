@@ -236,6 +236,17 @@ def routing_data(stage, summary):
             'mean_perf_per_cost': sum(r['perf_per_cost'] for r in rows)/len(rows) if status == 'finite' else None,
             'mean_perf_per_cost_status': status,
             'cost_basis': 'raw_total_usd_per_task'})
+    aggregation = summary.get('aggregation_version', 'raw_usd_unweighted')
+    if aggregation == 'raw_usd_range_weighted_v1':
+        means = summary['dataset_arithmetic_means']
+        for mean in means:
+            rows = [r for r in metrics if r['method'] == mean['method']]
+            weights = mean['dataset_weights']
+            if abs(sum(float(w) for w in weights.values()) - 1) > 1e-12:
+                raise ValueError('Invalid dataset weights')
+            expected = sum(r['perf_per_cost'] * float(weights[r['dataset']]) for r in rows)
+            if abs(expected - mean['mean_perf_per_cost']) > max(1e-10, abs(expected)*1e-12):
+                raise ValueError('Weighted routing score does not match raw costs')
     choices = []
     combined = stage / 'routes.jsonl'
     if combined.exists():
@@ -253,7 +264,9 @@ def routing_data(stage, summary):
         choices.extend({'method':method,'dataset':ds,'model':model,'count':n} for (ds,model),n in counts.items())
     return {'tasks': summary['tasks'], 'finished': summary['finished'], 'coverage':summary['coverage'],
             'metrics': metrics, 'means': means, 'choices': choices,
-            'snapshot_sha256': summary['snapshot_sha256'], 'method_version':'github_aligned',
+            'aggregation_version': aggregation,
+            'dataset_weights': means[0].get('dataset_weights', {}) if means else {},
+            'snapshot_sha256': summary['snapshot_sha256'], 'method_version': 'raw_usd_range_weighted_v1' if aggregation == 'raw_usd_range_weighted_v1' else 'github_aligned',
             'includes_terminal': 'terminal' in summary['coverage']}
 
 
@@ -297,7 +310,7 @@ def build():
             'cost':'Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.',
             'normalization':'c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.',
             'tokens':'Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. For interrupted Terminal-Bench requests, input is reconstructed with the model tokenizer and output uses only saved token counts, as authorized by the user. Unavailable output is excluded, not estimated. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
-            'routing':'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.',
+            'routing': ('Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = range_d / sum_j range_j and range_d = max solver cost - min solver cost over all task-model cells in dataset d. Macro-F1 is an unweighted dataset mean.' if routed['aggregation_version'] == 'raw_usd_range_weighted_v1' else 'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.'),
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
             'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.',
             'comparison':'Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction.'}}

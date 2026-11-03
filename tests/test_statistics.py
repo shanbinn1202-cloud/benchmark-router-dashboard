@@ -63,7 +63,9 @@ class StatisticsTests(unittest.TestCase):
             self.assertAlmostEqual(row['perf_per_cost'],row['passed']/total)
         for mean in d['routing']['means']:
             rows=[r for r in d['routing']['metrics'] if r['method']==mean['method']]
-            self.assertAlmostEqual(sum(r['perf_per_cost'] for r in rows)/len(rows),mean['mean_perf_per_cost'])
+            weights=mean.get('dataset_weights')
+            expected=sum(r['perf_per_cost']*float(weights[r['dataset']]) for r in rows) if weights else sum(r['perf_per_cost'] for r in rows)/len(rows)
+            self.assertAlmostEqual(expected,mean['mean_perf_per_cost'])
             self.assertAlmostEqual(sum(r['macro_f1'] for r in rows)/len(rows),mean['mean_macro_f1'])
             counts=[r['count'] for r in d['routing']['choices'] if r['method']==mean['method']]
             self.assertEqual(sum(counts),d['routing']['tasks'])

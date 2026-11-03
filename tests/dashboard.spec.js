@@ -113,3 +113,17 @@ test('model windows share scales and retain costs, tokens and coverage',async({p
     expect(order.indexOf('science')).toBe(order.indexOf('verilogeval')+1);
   }
 });
+
+test('range-weighted routing describes raw costs and batched feedback',async({page})=>{
+  const weighted=structuredClone(data);
+  weighted.routing.aggregation_version='raw_usd_range_weighted_v1';
+  const datasets=[...new Set(weighted.routing.metrics.map(r=>r.dataset))];
+  weighted.routing.dataset_weights=Object.fromEntries(datasets.map(d=>[d,1/datasets.length]));
+  await page.route('**/assets/data.json*',r=>r.fulfill({contentType:'application/json',body:JSON.stringify(weighted)}));
+  await page.goto('/');
+  await expect(page.locator('#routing-metrics')).toContainText('not its inverse');
+  await expect(page.locator('#routing-metrics')).toContainText('unweighted arithmetic mean');
+  await expect(page.locator('#routing-methods')).toContainText('raw USD prices');
+  await expect(page.locator('#routing-methods')).toContainText('256 requests');
+  await expect(page.locator('.routing-dataset-panel').first()).toContainText('weight');
+});
