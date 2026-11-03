@@ -40,6 +40,9 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   await expect(page.locator('#routing-methods')).toContainText('Training labels select the cheapest successful model');
   await expect(page.locator('.routing-dataset-panel')).toHaveCount(new Set(data.routing.metrics.map(r=>r.dataset)).size);
   for(const panel of await page.locator('.routing-dataset-panel').all()){
+    await expect(panel).not.toHaveAttribute('open','');
+    await panel.locator('summary').click();
+    await expect(panel.locator('table')).toBeVisible();
     const dataset=await panel.getAttribute('data-dataset');
     const rows=data.routing.metrics.filter(r=>r.dataset===dataset);
     await expect(panel.locator('tbody tr')).toHaveCount(rows.length);
@@ -51,6 +54,10 @@ test('English results, simplified layout, routing tables and metrics',async({pag
       await expect(row.locator('td').nth(3)).toHaveText(Number(r.raw_backend_cost_usd).toLocaleString('en-US',{minimumFractionDigits:4,maximumFractionDigits:4}));
     }
   }
+  await page.locator('[data-route-sort=macro_f1]').first().click();
+  await expect(page.locator('.routing-dataset-panel[open]')).toHaveCount(new Set(data.routing.metrics.map(r=>r.dataset)).size);
+  await page.locator('.routing-dataset-panel summary').first().click();
+  await expect(page.locator('.routing-dataset-panel').first().locator('table')).toBeHidden();
   const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));
   expect(width.scroll).toBeLessThanOrEqual(width.view+1);
   expect(errors).toEqual([]);

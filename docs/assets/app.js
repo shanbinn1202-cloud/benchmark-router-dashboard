@@ -7,6 +7,7 @@ const thinkingModes = {qwen:'Off',gemma:'Off',muse:'On · Low',deepseek:'Off'};
 const methodColors = {'Random':'#949084','KNN':'#346689','Zero-shot LLM':'#ae7b24','Agent-as-a-Router':'#9b493c'};
 const methods = Object.keys(methodColors);
 let data, modelSort=null, routeSort=null;
+const expandedRoutingDatasets=new Set();
 const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const valid = v => v !== null && v !== undefined && v !== '' && Number.isFinite(Number(v));
 const f = (v,d=2) => valid(v) ? Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}) : '—';
@@ -142,8 +143,12 @@ function renderRouting() {
     const datasetRows=order(filtered.filter(r=>r.dataset===d.id),routeSort);
     const bestValue=key=>Math.max(...datasetRows.map(r=>r[key]).filter(valid).map(Number));
     const isBest=(r,key)=>valid(r[key])&&Number(r[key])===bestValue(key);
-    return `<article class="panel routing-dataset-panel" data-dataset="${esc(d.id)}"><div class="table-top"><h3>${esc(d.label)}</h3><span>${integer(datasetRows[0].tasks)} tasks</span></div><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(d.label)} routing statistics"><table><caption class="sr-only">${esc(d.label)} routing results</caption><thead><tr><th>Method</th><th class="num">Tasks</th><th class="num sortable" data-route-sort="performance" tabindex="0" role="button">Completion rate ↕</th><th class="num">Solver, USD</th><th class="num">Norm. cost / task</th><th class="num sortable" data-route-sort="perf_per_cost" tabindex="0" role="button">Perf / Cost ↕</th><th class="num sortable" data-route-sort="macro_f1" tabindex="0" role="button">Macro-F1 ↕</th></tr></thead><tbody>${datasetRows.map(r=>`<tr><td>${esc(r.method)}</td><td class="num">${integer(r.tasks)}</td><td class="num">${pct(r.performance)}</td><td class="num">${f(r.raw_backend_cost_usd,4)}</td><td class="num">${f(r.metric_cost,4)}</td><td class="num${isBest(r,'perf_per_cost')?' cell-value':''}">${f(r.perf_per_cost,3)}</td><td class="num${isBest(r,'macro_f1')?' cell-value':''}">${f(r.macro_f1,4)}</td></tr>`).join('')}</tbody></table></div></article>`;
+    return `<details class="panel routing-dataset-panel" data-dataset="${esc(d.id)}"${expandedRoutingDatasets.has(d.id)?' open':''}><summary class="table-top"><h3>${esc(d.label)}</h3><span>${integer(datasetRows[0].tasks)} tasks</span></summary><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(d.label)} routing statistics"><table><caption class="sr-only">${esc(d.label)} routing results</caption><thead><tr><th>Method</th><th class="num">Tasks</th><th class="num sortable" data-route-sort="performance" tabindex="0" role="button">Completion rate ↕</th><th class="num">Solver, USD</th><th class="num">Norm. cost / task</th><th class="num sortable" data-route-sort="perf_per_cost" tabindex="0" role="button">Perf / Cost ↕</th><th class="num sortable" data-route-sort="macro_f1" tabindex="0" role="button">Macro-F1 ↕</th></tr></thead><tbody>${datasetRows.map(r=>`<tr><td>${esc(r.method)}</td><td class="num">${integer(r.tasks)}</td><td class="num">${pct(r.performance)}</td><td class="num">${f(r.raw_backend_cost_usd,4)}</td><td class="num">${f(r.metric_cost,4)}</td><td class="num${isBest(r,'perf_per_cost')?' cell-value':''}">${f(r.perf_per_cost,3)}</td><td class="num${isBest(r,'macro_f1')?' cell-value':''}">${f(r.macro_f1,4)}</td></tr>`).join('')}</tbody></table></div></details>`;
   }).join('');
+  $$('.routing-dataset-panel').forEach(panel=>panel.addEventListener('toggle',()=>{
+    if(panel.open)expandedRoutingDatasets.add(panel.dataset.dataset);
+    else expandedRoutingDatasets.delete(panel.dataset.dataset);
+  }));
   bindSort('[data-route-sort]','routeSort',()=>routeSort,v=>routeSort=v,renderRouting);
   $('#legend').innerHTML=data.models.map(m=>`<span><i class="model-dot" style="background:${colors[m.id]}"></i>${esc(m.id==='deepseek'?'DeepSeek':m.id[0].toUpperCase()+m.id.slice(1))}</span>`).join('');
   $('#selection-chart').innerHTML=methods.map(method=>{
