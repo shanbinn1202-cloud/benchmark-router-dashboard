@@ -23,7 +23,7 @@ NAMES = {'qwen': 'Qwen3.8-27B', 'gemma': 'Gemma 4 31B',
          'muse': 'Muse Glimmer 30B', 'deepseek': 'DeepSeek'}
 DATASETS = {'aethercode': 'AetherCode', 'bigcodebench_hard': 'BigCodeBench Hard',
             'ds1000': 'DS-1000', 'kernelbench': 'KernelBench',
-            'scicode_background': 'SciCode · Background', 'science': 'SWE-bench Science',
+            'scicode_background': 'SciCode', 'science': 'SWE-bench Science',
             'verilogeval': 'VerilogEval', 'terminal': 'Terminal-Bench 2.0'}
 TERMINAL = historical.PROJECT / 'experiments/terminalbench2_terminus2_20261102'
 
