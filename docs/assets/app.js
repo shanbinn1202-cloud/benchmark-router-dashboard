@@ -2,6 +2,8 @@
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const colors = {qwen:'#346689',gemma:'#ae7b24',muse:'#7d7960',deepseek:'#9b493c'};
+// Verified against historical model profiles and Science / Terminal campaign configurations.
+const thinkingModes = {qwen:'Off',gemma:'Off',muse:'On · Low',deepseek:'Off'};
 const methodColors = {'Random':'#949084','KNN':'#346689','Zero-shot LLM':'#ae7b24','Agent-as-a-Router':'#9b493c'};
 const methods = Object.keys(methodColors);
 let data, modelSort=null, routeSort=null;
@@ -79,7 +81,7 @@ function renderModels() {
     const prefix=metric==='raw_cost_usd'&&aggregatePartial?'≥ ':'';
     const suffix=metric!=='raw_cost_usd'&&aggregatePartial?'†':'';
     return `<article class="model-window" data-model="${esc(m.id)}" aria-labelledby="model-title-${esc(m.id)}">
-      <div class="model-window-heading"><span class="window-kicker">${esc(metricLabel)}</span><h3 id="model-title-${esc(m.id)}" title="${esc(m.model_id)}">${esc(m.label)}</h3></div>
+      <div class="model-window-heading"><span class="window-kicker">${esc(metricLabel)}</span><h3 id="model-title-${esc(m.id)}" title="${esc(m.model_id)}">${esc(m.label)}</h3><p class="thinking-mode">Thinking: ${esc(thinkingModes[m.id])}</p></div>
       <div class="dataset-axis" aria-hidden="true"><span></span><div><span>${formatModelMetric(0,metric,true)}</span><span>${formatModelMetric(max/2,metric,true)}</span><span>${formatModelMetric(max,metric,true)}</span></div><span></span></div>
       <div class="dataset-bars">${modelRows.map(r=>{
         const value=modelMetricValue(r,metric), hasValue=valid(value), incomplete=partial(r);
