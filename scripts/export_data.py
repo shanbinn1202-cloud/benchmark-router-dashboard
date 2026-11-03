@@ -265,6 +265,7 @@ def routing_data(stage, summary):
     return {'tasks': summary['tasks'], 'finished': summary['finished'], 'coverage':summary['coverage'],
             'metrics': metrics, 'means': means, 'choices': choices,
             'aggregation_version': aggregation,
+            'agent_workers': summary.get('agent_workers',256),
             'dataset_weights': means[0].get('dataset_weights', {}) if means else {},
             'snapshot_sha256': summary['snapshot_sha256'], 'method_version': 'raw_usd_range_weighted_v1' if aggregation == 'raw_usd_range_weighted_v1' else 'github_aligned',
             'includes_terminal': 'terminal' in summary['coverage']}
