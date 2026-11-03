@@ -122,6 +122,7 @@ test('range-weighted routing describes raw costs and batched feedback',async({pa
   await page.route('**/assets/data.json*',r=>r.fulfill({contentType:'application/json',body:JSON.stringify(weighted)}));
   await page.goto('/');
   await expect(page.locator('#routing-metrics')).toContainText('without dividing by their sum');
+  await expect(page.locator('#routing-metrics')).toContainText('μd / D');
   await expect(page.locator('#routing-metrics')).toContainText('unweighted arithmetic mean');
   await expect(page.locator('#routing-methods')).toContainText('raw USD prices');
   await expect(page.locator('#routing-methods')).toContainText(`${data.routing.agent_workers??256} requests`);

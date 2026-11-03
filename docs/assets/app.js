@@ -21,7 +21,7 @@ function formatTime(value) {return new Intl.DateTimeFormat('en-GB',{timeZone:'As
 
 function options() {
   const oldRoute=$('#routing-dataset').value;
-  $('#routing-dataset').innerHTML='<option value="all">'+(['raw_usd_range_weighted_v1','raw_usd_inverse_mean_weighted_v1'].includes(data.routing.aggregation_version)?'All datasets (weighted Perf/Cost)':'Dataset mean (unweighted)')+'</option>'+data.datasets.filter(d=>data.routing.coverage[d.id]).map(d=>`<option value="${esc(d.id)}">${esc(d.label)}</option>`).join('');
+  $('#routing-dataset').innerHTML='<option value="all">'+(['raw_usd_range_weighted_v1','raw_usd_inverse_mean_weighted_v1','raw_usd_mean_cost_weighted_v1'].includes(data.routing.aggregation_version)?'All datasets (weighted Perf/Cost)':'Dataset mean (unweighted)')+'</option>'+data.datasets.filter(d=>data.routing.coverage[d.id]).map(d=>`<option value="${esc(d.id)}">${esc(d.label)}</option>`).join('');
   if([...$('#routing-dataset').options].some(o=>o.value===oldRoute))$('#routing-dataset').value=oldRoute;
 }
 
@@ -135,13 +135,13 @@ function bars(target, rows, key, max) {
 function renderRouting() {
   const status=data.routing.method_status||[];
   $('#routing-progress').textContent=status.filter(s=>s.status!=='COMPLETED').map(s=>`${s.method}: ${integer(s.completed)}/${integer(s.total)} · running`).join(' · ');
-  const weighted=['raw_usd_range_weighted_v1','raw_usd_inverse_mean_weighted_v1'].includes(data.routing.aggregation_version);
+  const weighted=['raw_usd_range_weighted_v1','raw_usd_inverse_mean_weighted_v1','raw_usd_mean_cost_weighted_v1'].includes(data.routing.aggregation_version);
   if(weighted) {
     const methodsText=$('#routing-methods').querySelectorAll('p');
     methodsText[2].textContent='Receives the full task prompt, available task metadata, candidate model descriptions, and raw USD prices per million input/output tokens. No task answers, observed per-task costs or correctness labels are provided.';
     methodsText[3].textContent=`Uses task and candidate information, training-fold performance memory and exploration. Up to ${data.routing.agent_workers??256} requests share a frozen memory snapshot; selected-model feedback updates memory only after the entire batch finishes. This is a batched adaptation of the sequential GitHub agent.`;
     const metricText=$('#routing-metrics').querySelectorAll('p');
-    metricText[0].innerHTML='For method m and dataset d: P<sub>md</sub> = passed / N<sub>d</sub>; C<sub>md</sub> = (solver USD + router USD) / N<sub>d</sub>; S<sub>md</sub> = P<sub>md</sub> / C<sub>md</sub>. Per-dataset scores use raw USD.<br><br>Dataset mean trajectory cost: <strong>μ<sub>d</sub> = Σ<sub>i=1…Nᵈ</sub>Σ<sub>k=1…4</sub> c<sub>dik</sub> / (4N<sub>d</sub>)</strong>. With D = 8 datasets, <strong>w<sub>d</sub> = 1 / (Dμ<sub>d</sub>)</strong> and the overall score is <strong>S̄<sub>m</sub> = Σ<sub>d</sub> w<sub>d</sub>S<sub>md</sub></strong>. The same weights apply to every method; μ includes all candidate-model solver trajectories and excludes router fees. Weights are used directly, without dividing by their sum; they need not sum to one.';
+    metricText[0].innerHTML='For method m and dataset d: P<sub>md</sub> = passed / N<sub>d</sub>; C<sub>md</sub> = (solver USD + router USD) / N<sub>d</sub>; S<sub>md</sub> = P<sub>md</sub> / C<sub>md</sub>. Per-dataset scores use raw USD.<br><br>Dataset mean trajectory cost: <strong>μ<sub>d</sub> = Σ<sub>i=1…Nᵈ</sub>Σ<sub>k=1…4</sub> c<sub>dik</sub> / (4N<sub>d</sub>)</strong>. With D = 8 datasets, <strong>w<sub>d</sub> = μ<sub>d</sub> / D</strong> and the overall score is <strong>S̄<sub>m</sub> = Σ<sub>d</sub> w<sub>d</sub>S<sub>md</sub></strong>. The same weights apply to every method; μ includes all candidate-model solver trajectories and excludes router fees. Weights are used directly, without dividing by their sum; they need not sum to one.';
     metricText[1].textContent='Ground truth is the cheapest successful model for each task, or the cheapest model if all fail; exact cost ties use alphabetical model aliases. Macro-F1 averages F1 equally over the four candidate labels. The overall Macro-F1 is the unweighted arithmetic mean across all eight datasets.';
   }
   const ds=$('#routing-dataset').value, rows=routeSummary();

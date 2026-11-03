@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T13:02:34.638434+00:00",
+  "updated_at": "2026-11-03T13:04:38.600977+00:00",
   "models": [
     {
       "id": "qwen",
@@ -2717,81 +2717,81 @@
       {
         "method": "Random",
         "datasets": 8,
-        "mean_perf_per_cost": 898944.9504079174,
+        "mean_perf_per_cost": 0.520610022678347,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.1709975198428628,
         "dataset_weights": {
-          "aethercode": "9.727112516556524293876182848",
-          "bigcodebench_hard": "170.5658028403839108919991051",
-          "ds1000": "417.5677545668222390776879688",
-          "kernelbench": "56.28060365695003667398384830",
-          "scicode_background": "16.07242862358884020180258103",
-          "science": "0.09047556060003878022807267067",
-          "verilogeval": "216.8485881755734277343072348",
-          "terminal": "0.1061258451767682469865017921"
+          "aethercode": "0.00160633486796875",
+          "bigcodebench_hard": "0.00009160687394425675675675675676",
+          "ds1000": "0.00003741907709375",
+          "kernelbench": "0.000277626730787037037037037037",
+          "scicode_background": "0.00097216172900390625",
+          "science": "0.1726985707120703124998372396",
+          "verilogeval": "0.00007205488461538461538461538461",
+          "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times 1/(D * mean trajectory USD); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
-        "formula": "sum_d [1/(D * mean_{task,model}(solver_cost_usd))] * [completion_rate_d / mean_raw_total_USD_d]",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "KNN",
         "datasets": 8,
-        "mean_perf_per_cost": 4200203.178985568,
+        "mean_perf_per_cost": 2.8377876292955713,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.2612024236238134,
         "dataset_weights": {
-          "aethercode": "9.727112516556524293876182848",
-          "bigcodebench_hard": "170.5658028403839108919991051",
-          "ds1000": "417.5677545668222390776879688",
-          "kernelbench": "56.28060365695003667398384830",
-          "scicode_background": "16.07242862358884020180258103",
-          "science": "0.09047556060003878022807267067",
-          "verilogeval": "216.8485881755734277343072348",
-          "terminal": "0.1061258451767682469865017921"
+          "aethercode": "0.00160633486796875",
+          "bigcodebench_hard": "0.00009160687394425675675675675676",
+          "ds1000": "0.00003741907709375",
+          "kernelbench": "0.000277626730787037037037037037",
+          "scicode_background": "0.00097216172900390625",
+          "science": "0.1726985707120703124998372396",
+          "verilogeval": "0.00007205488461538461538461538461",
+          "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times 1/(D * mean trajectory USD); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
-        "formula": "sum_d [1/(D * mean_{task,model}(solver_cost_usd))] * [completion_rate_d / mean_raw_total_USD_d]",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Zero-shot LLM",
         "datasets": 8,
-        "mean_perf_per_cost": 2837816.900719299,
+        "mean_perf_per_cost": 0.8087323805456658,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.17093069364148036,
         "dataset_weights": {
-          "aethercode": "9.727112516556524293876182848",
-          "bigcodebench_hard": "170.5658028403839108919991051",
-          "ds1000": "417.5677545668222390776879688",
-          "kernelbench": "56.28060365695003667398384830",
-          "scicode_background": "16.07242862358884020180258103",
-          "science": "0.09047556060003878022807267067",
-          "verilogeval": "216.8485881755734277343072348",
-          "terminal": "0.1061258451767682469865017921"
+          "aethercode": "0.00160633486796875",
+          "bigcodebench_hard": "0.00009160687394425675675675675676",
+          "ds1000": "0.00003741907709375",
+          "kernelbench": "0.000277626730787037037037037037",
+          "scicode_background": "0.00097216172900390625",
+          "science": "0.1726985707120703124998372396",
+          "verilogeval": "0.00007205488461538461538461538461",
+          "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times 1/(D * mean trajectory USD); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
-        "formula": "sum_d [1/(D * mean_{task,model}(solver_cost_usd))] * [completion_rate_d / mean_raw_total_USD_d]",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       },
       {
         "method": "Agent-as-a-Router",
         "datasets": 8,
-        "mean_perf_per_cost": 2541629.8748266813,
+        "mean_perf_per_cost": 1.0941794043322999,
         "mean_perf_per_cost_status": "finite",
         "mean_macro_f1": 0.16129585893732357,
         "dataset_weights": {
-          "aethercode": "9.727112516556524293876182848",
-          "bigcodebench_hard": "170.5658028403839108919991051",
-          "ds1000": "417.5677545668222390776879688",
-          "kernelbench": "56.28060365695003667398384830",
-          "scicode_background": "16.07242862358884020180258103",
-          "science": "0.09047556060003878022807267067",
-          "verilogeval": "216.8485881755734277343072348",
-          "terminal": "0.1061258451767682469865017921"
+          "aethercode": "0.00160633486796875",
+          "bigcodebench_hard": "0.00009160687394425675675675675676",
+          "ds1000": "0.00003741907709375",
+          "kernelbench": "0.000277626730787037037037037037",
+          "scicode_background": "0.00097216172900390625",
+          "science": "0.1726985707120703124998372396",
+          "verilogeval": "0.00007205488461538461538461538461",
+          "terminal": "0.1472308651485814606741573034"
         },
-        "aggregation": "Sum of per-dataset raw Perf/Cost times 1/(D * mean trajectory USD); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
-        "formula": "sum_d [1/(D * mean_{task,model}(solver_cost_usd))] * [completion_rate_d / mean_raw_total_USD_d]",
+        "aggregation": "Sum of per-dataset raw Perf/Cost times (mean trajectory USD / D); weights are not renormalized. Macro-F1 is an unweighted dataset mean.",
+        "formula": "sum_d [mean_{task,model}(solver_cost_usd)/D] * [completion_rate_d / mean_raw_total_USD_d]",
         "cost_basis": "raw_total_usd_per_task"
       }
     ],
@@ -3367,7 +3367,7 @@
         "count": 2
       }
     ],
-    "aggregation_version": "raw_usd_inverse_mean_weighted_v1",
+    "aggregation_version": "raw_usd_mean_cost_weighted_v1",
     "agent_workers": 32,
     "dataset_mean_trajectory_cost_usd": {
       "aethercode": "0.01285067894375",
@@ -3380,17 +3380,17 @@
       "terminal": "1.177846921188651685393258427"
     },
     "dataset_weights": {
-      "aethercode": "9.727112516556524293876182848",
-      "bigcodebench_hard": "170.5658028403839108919991051",
-      "ds1000": "417.5677545668222390776879688",
-      "kernelbench": "56.28060365695003667398384830",
-      "scicode_background": "16.07242862358884020180258103",
-      "science": "0.09047556060003878022807267067",
-      "verilogeval": "216.8485881755734277343072348",
-      "terminal": "0.1061258451767682469865017921"
+      "aethercode": "0.00160633486796875",
+      "bigcodebench_hard": "0.00009160687394425675675675675676",
+      "ds1000": "0.00003741907709375",
+      "kernelbench": "0.000277626730787037037037037037",
+      "scicode_background": "0.00097216172900390625",
+      "science": "0.1726985707120703124998372396",
+      "verilogeval": "0.00007205488461538461538461538461",
+      "terminal": "0.1472308651485814606741573034"
     },
     "snapshot_sha256": "6cf69c826b9f70d119c0a5dfa57949f422b38f6c18870891aa6c10e1a4103dbd",
-    "method_version": "raw_usd_inverse_mean_weighted_v1",
+    "method_version": "raw_usd_mean_cost_weighted_v1",
     "includes_terminal": true
   },
   "collection": {
@@ -3422,7 +3422,7 @@
     "cost": "Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.",
     "normalization": "c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.",
     "tokens": "Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. For interrupted Terminal-Bench requests, input is reconstructed with the model tokenizer and output uses only saved token counts, as authorized by the user. Unavailable output is excluded, not estimated. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.",
-    "routing": "Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = 1 / (D * mean trajectory cost_d). The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Macro-F1 is an unweighted dataset mean.",
+    "routing": "Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Macro-F1 is an unweighted dataset mean.",
     "labels": "The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.",
     "methods": "KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.",
     "comparison": "Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction."
