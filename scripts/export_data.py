@@ -184,6 +184,7 @@ def summarize(cells, scope, scales=None):
                 'accuracy': sum(c['passed'] for c in graded)/len(graded) if graded else None,
                 'running': sum(c.get('run_status') == 'RUNNING' for c in group),
                 'ungraded': len(group)-len(graded), 'cost_tasks': len(priced),
+                'adjudicated_failures': sum(c.get('grade_kind') == 'user_adjudicated_interrupted_generation' for c in graded),
                 'simulated_cost_repairs': sum(c.get('cost_kind') == 'simulated' for c in priced),
                 'raw_cost_usd': str(cost), 'known_cost_usd': str(known),
                 'mean_cost_usd': str(cost/len(priced)) if priced else None,
@@ -257,7 +258,7 @@ def build():
             m:{'planned':89,'graded':next(r['graded'] for r in all_rows if r['dataset']=='terminal' and r['model']==m),
                'running':next(r['running'] for r in all_rows if r['dataset']=='terminal' and r['model']==m)} for m in NAMES}},
         'notes':{
-            'accuracy':'Passed / graded tasks. Running or ungraded tasks are excluded. Terminal deadlocks, client timeouts and verifier timeouts count as failures under the experiment policy.',
+            'accuracy':'Passed / graded tasks. Three interrupted Science trials are failures under explicit user adjudication. Terminal deadlocks, client timeouts and verifier timeouts also count as failures. Running or ungraded tasks are excluded.',
             'cost':'Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.',
             'normalization':'c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.',
             'tokens':'Recorded tokens per task, including repeated inputs and verified retry usage. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
