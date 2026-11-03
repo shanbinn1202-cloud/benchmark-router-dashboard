@@ -33,7 +33,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   await expect(page.locator('a.download, a[download], #methodology, #method-notes')).toHaveCount(0);
   await expect(page.locator('#routing-methods h4')).toHaveCount(4);
   await expect(page.locator('#routing-metrics h4')).toHaveCount(2);
-  await expect(page.locator('.routing-guide')).toContainText('Training labels select the cheapest successful model');
+  await expect(page.locator('#routing-methods')).toContainText('Training labels select the cheapest successful model');
   await expect(page.locator('.routing-dataset-panel')).toHaveCount(new Set(data.routing.metrics.map(r=>r.dataset)).size);
   for(const panel of await page.locator('.routing-dataset-panel').all()){
     const dataset=await panel.getAttribute('data-dataset');
