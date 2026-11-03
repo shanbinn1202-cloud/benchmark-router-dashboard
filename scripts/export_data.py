@@ -317,6 +317,8 @@ def routing_data(stage, summary, cohort=None):
             'aggregation_version': aggregation,
             'agent_workers': summary.get('agent_workers',256),
             'agent_variant': summary.get('agent_variant','github_online_batched'),
+            'zero_shot_variant': summary.get('zero_shot_variant','github_previous'),
+            'zero_shot_router_model': summary.get('zero_shot_router_model','deepseek/deepseek-v4.1-flash-1017'),
             'agent_policy_note': summary.get('agent_policy_note',''),
             'dataset_mean_trajectory_cost_usd': dataset_mean_costs,
             'dataset_weights': means[0].get('dataset_weights', {}) if means else {},
