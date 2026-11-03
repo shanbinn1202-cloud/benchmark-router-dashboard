@@ -316,6 +316,8 @@ def routing_data(stage, summary, cohort=None):
             'metrics': metrics, 'means': means, 'choices': choices,
             'aggregation_version': aggregation,
             'agent_workers': summary.get('agent_workers',256),
+            'agent_variant': summary.get('agent_variant','github_online_batched'),
+            'agent_policy_note': summary.get('agent_policy_note',''),
             'dataset_mean_trajectory_cost_usd': dataset_mean_costs,
             'dataset_weights': means[0].get('dataset_weights', {}) if means else {},
             'snapshot_sha256': summary['snapshot_sha256'], 'method_version': aggregation if aggregation in ('raw_usd_range_weighted_v1','raw_usd_inverse_mean_weighted_v1','raw_usd_mean_cost_weighted_v1') else 'github_aligned',
@@ -410,8 +412,8 @@ def build():
             'tokens':'Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. For interrupted Terminal-Bench requests, input is reconstructed with the model tokenizer and output uses only saved token counts, as authorized by the user. Unavailable output is excluded, not estimated. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
             'routing': ('Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = mean trajectory cost_d / D. The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Classification accuracy is an unweighted dataset mean.' if routed['aggregation_version'] == 'raw_usd_mean_cost_weighted_v1' else 'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Classification accuracy measures exact matches to best-model labels. Overall metrics are unweighted means across datasets.'),
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
-            'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.',
-            'comparison':'Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction.'}}
+            'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot: GitHub-adapted LLM router. Agent: '+routed.get('agent_policy_note','GitHub online adaptation.'),
+            'comparison':'Solver harnesses, context limits and providers vary across runs. Routers use the same existing task-model outcomes. GitHub default ID Agent uses training folds only; its main-policy adaptation is distinct from the online LLM Agent and OOD verifier cascade.'}}
 
     cache.db.commit(); cache.db.close()
     dest=HERE/'docs/assets';dest.mkdir(parents=True,exist_ok=True)
