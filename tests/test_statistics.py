@@ -8,6 +8,15 @@ spec=importlib.util.spec_from_file_location('exporter',ROOT/'scripts/export_data
 exporter=importlib.util.module_from_spec(spec);spec.loader.exec_module(exporter)
 
 class StatisticsTests(unittest.TestCase):
+    def test_simulated_repair_keeps_score_and_declares_scope(self):
+        cell={'dataset':'aethercode','model':'qwen','passed':False,'cost_usd':'0.04',
+              'cost_kind':'simulated','input_tokens':100,'output_tokens':10,
+              'token_accounting_complete':True,'_input':100,'_output':10,'_tokens_complete':True}
+        rows,_=exporter.summarize([cell],'formal')
+        self.assertEqual(rows[0]['accuracy'],0)
+        self.assertEqual(rows[0]['simulated_cost_repairs'],1)
+        self.assertEqual(exporter.usage(cell,None),(100,10,True))
+
     def test_dataset_scale_shared_across_models_and_missing_is_not_zero(self):
         cells=[{'dataset':'ds1000','model':m,'passed':p,'cost_usd':c,
                 '_input':i,'_output':o,'_tokens_complete':ok}

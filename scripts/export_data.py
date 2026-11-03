@@ -16,6 +16,7 @@ BASE = PROJECT_ROOT / 'router_baselines'
 sys.path[:0] = [str(BASE / 'all_datasets'), str(BASE)]
 from routing_common import data as historical
 from routing_common.io import Sources, load_module
+from routing_common.repairs import apply_repairs
 from collect import terminal_cell, FINAL
 
 NAMES = {'qwen': 'Qwen3.8-27B', 'gemma': 'Gemma 4 31B',
@@ -77,8 +78,9 @@ class ReceiptCache:
 def usage(cell, cache):
     if 'input_tokens' in cell and 'output_tokens' in cell:
         errors = set(cell.get('exclusion_reasons', []))
-        complete = not errors.intersection({'missing_current_attempt_accounting', 'incomplete_token_accounting',
+        complete = cell.get('token_accounting_complete', not errors.intersection({'missing_current_attempt_accounting', 'incomplete_token_accounting',
             'missing_usage_or_ambiguous_call', 'invalid_token_usage', 'no_recorded_generation_usage'})
+        )
         return cell['input_tokens'], cell['output_tokens'], complete
     total_in = total_out = 0
     paths = cell.get('call_sources', []); complete = bool(paths)
@@ -136,7 +138,7 @@ def formal_cells(cache):
                      'passed': None, 'cost_usd': None, 'eligible': False}
             c['run_status'] = state['status']
             cells['terminal', row['task'], model] = c
-    return list(cells.values())
+    return list(apply_repairs(cells, sources).values())
 
 
 def enrich(cells, cache):
@@ -182,6 +184,7 @@ def summarize(cells, scope, scales=None):
                 'accuracy': sum(c['passed'] for c in graded)/len(graded) if graded else None,
                 'running': sum(c.get('run_status') == 'RUNNING' for c in group),
                 'ungraded': len(group)-len(graded), 'cost_tasks': len(priced),
+                'simulated_cost_repairs': sum(c.get('cost_kind') == 'simulated' for c in priced),
                 'raw_cost_usd': str(cost), 'known_cost_usd': str(known),
                 'mean_cost_usd': str(cost/len(priced)) if priced else None,
                 'normalized_cost_sum': str(sum(norm)),
@@ -255,9 +258,9 @@ def build():
                'running':next(r['running'] for r in all_rows if r['dataset']=='terminal' and r['model']==m)} for m in NAMES}},
         'notes':{
             'accuracy':'Passed / graded tasks. Running or ungraded tasks are excluded. Terminal deadlocks, client timeouts and verifier timeouts count as failures under the experiment policy.',
-            'cost':'USD for the selected formal attempt, including billed retries. API runs use actual charges; local runs use frozen provider rates. Replaced attempts are excluded.',
+            'cost':'Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.',
             'normalization':'c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.',
-            'tokens':'Total tokens across all calls per task, averaged over graded tasks with complete usage records. Includes repeated inputs and verified billed retries.',
+            'tokens':'Recorded tokens per task, including repeated inputs and verified retry usage. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
             'routing':'Perf/Cost = accuracy / mean normalized total cost, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.',
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
             'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.',
