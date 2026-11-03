@@ -125,7 +125,10 @@ test('range-weighted routing describes raw costs and batched feedback',async({pa
   await expect(page.locator('#routing-metrics')).toContainText('μd / D');
   await expect(page.locator('#routing-metrics')).toContainText('unweighted arithmetic mean');
   await expect(page.locator('#routing-methods')).toContainText('raw USD prices');
-  if(data.routing.agent_variant==='github_id_default_hierarchical') {
+  if(data.routing.agent_variant==='github_id_hierarchical_nested_adapted') {
+    await expect(page.locator('#routing-methods')).toContainText('grouped inner validation');
+    await expect(page.locator('#routing-methods')).toContainText('no test-outcome feedback');
+  } else if(data.routing.agent_variant==='github_id_default_hierarchical') {
     await expect(page.locator('#routing-methods')).toContainText('GitHub default ID hierarchical');
     await expect(page.locator('#routing-methods')).toContainText('No test-outcome feedback');
   } else await expect(page.locator('#routing-methods')).toContainText(`${data.routing.agent_workers??256} requests`);
