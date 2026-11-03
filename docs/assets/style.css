@@ -24,5 +24,3 @@
 #model-tables{display:grid;gap:18px;margin-top:22px}@media(max-width:640px){#model-tables{gap:12px}}
 
 .thinking-label{font-size:.65em;font-weight:600;color:var(--ink)}
-
-:is(.routing-dataset-panel,.model-dataset-panel)>summary{cursor:pointer;justify-content:flex-start;list-style:none;border-bottom:0}:is(.routing-dataset-panel,.model-dataset-panel)>summary::-webkit-details-marker{display:none}:is(.routing-dataset-panel,.model-dataset-panel)>summary::before{content:'▸';color:var(--muted)}:is(.routing-dataset-panel,.model-dataset-panel)[open]>summary::before{content:'▾'}:is(.routing-dataset-panel,.model-dataset-panel)[open]>summary{border-bottom:1px solid var(--line)}:is(.routing-dataset-panel,.model-dataset-panel)>summary>span{margin-left:auto}

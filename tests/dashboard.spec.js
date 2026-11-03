@@ -8,8 +8,6 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   await expect(page.locator('.model-window')).toHaveCount(4);
   await expect(page.locator('.dataset-bar-row')).toHaveCount(rowsFor('formal').length);
   for(const panel of await page.locator('.model-dataset-panel').all()){
-    await expect(panel.locator('table')).toBeHidden();
-    await panel.locator('summary').click();
     await expect(panel.locator('table')).toBeVisible();
   }
   expect(await page.locator('.selection-panel').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('#routing-tables')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBeTruthy();
@@ -46,8 +44,6 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   await expect(page.locator('#routing-methods')).toContainText('Training labels select the cheapest successful model');
   await expect(page.locator('.routing-dataset-panel')).toHaveCount(new Set(data.routing.metrics.map(r=>r.dataset)).size);
   for(const panel of await page.locator('.routing-dataset-panel').all()){
-    await expect(panel).not.toHaveAttribute('open','');
-    await panel.locator('summary').click();
     await expect(panel.locator('table')).toBeVisible();
     const dataset=await panel.getAttribute('data-dataset');
     const rows=data.routing.metrics.filter(r=>r.dataset===dataset);
@@ -61,14 +57,12 @@ test('English results, simplified layout, routing tables and metrics',async({pag
     }
   }
   await page.locator('[data-route-sort=macro_f1]').first().click();
-  await expect(page.locator('.routing-dataset-panel[open]')).toHaveCount(new Set(data.routing.metrics.map(r=>r.dataset)).size);
-  await page.locator('.routing-dataset-panel summary').first().click();
-  await expect(page.locator('.routing-dataset-panel').first().locator('table')).toBeHidden();
+  await expect(page.locator('#model-tables details, #routing-tables details')).toHaveCount(0);
+  for(const table of await page.locator('#model-tables table, #routing-tables table').all())await expect(table).toBeVisible();
   const width=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));
   expect(width.scroll).toBeLessThanOrEqual(width.view+1);
   expect(errors).toEqual([]);
   await page.locator('#model-metric').selectOption('accuracy');
-  for(const summary of await page.locator('.model-dataset-panel summary').all())await summary.click();
   await page.locator('#models').screenshot({path:`test-results/model-cards-${test.info().project.name}.png`});
   await page.evaluate(()=>{document.activeElement?.blur();document.querySelectorAll('.table-wrap').forEach(el=>el.scrollLeft=0);window.scrollTo({top:0,behavior:'instant'});});
   await page.screenshot({path:`test-results/dashboard-${test.info().project.name}.png`,fullPage:true});
