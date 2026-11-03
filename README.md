@@ -2,7 +2,7 @@
 
 [Live dashboard](https://shanbinn1202-cloud.github.io/benchmark-router-dashboard/) · Static HTML, CSS and JavaScript. The page makes no model API calls.
 
-- **Models:** accuracy, pass counts, raw USD cost, normalized cost and mean input/output/total tokens.
+- **Models:** one panel per model with dataset bar charts, shared metric scales, and an expandable full data table. Includes accuracy, raw/normalized cost and mean input/output/total tokens.
 - **Routing:** Random, pooled KNN, Zero-shot LLM and Agent-as-a-Router; Perf/Cost, Macro-F1, costs and model selections.
 - Dataset filters, sortable tables, CSV/JSON exports and responsive layouts.
 

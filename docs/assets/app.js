@@ -52,16 +52,53 @@ function order(rows, sort) {
   return [...rows].sort((a,b)=>!valid(a[sort.key])?1:!valid(b[sort.key])?-1:(Number(a[sort.key])-Number(b[sort.key]))*sort.direction);
 }
 
+function modelMetricValue(row, metric) {
+  return metric==='raw_cost_usd' && row.cost_tasks<row.graded ? row.known_cost_usd : row[metric];
+}
+function formatModelMetric(value,metric,axis=false) {
+  if(!valid(value))return '—';
+  if(metric==='accuracy')return axis?f(Number(value)*100,0):pct(value);
+  if(metric.includes('tokens'))return compact(value);
+  if(metric==='normalized_cost_mean')return f(value,axis?1:4);
+  const digits=axis?(Number(value)===0?0:Math.max(0,Math.min(6,1-Math.floor(Math.log10(Math.abs(Number(value))))))):(metric==='mean_cost_usd'?6:4);
+  return '$'+f(value,digits);
+}
+function modelScale(rows,metric) {
+  if(metric==='accuracy'||metric==='normalized_cost_mean')return 1;
+  const maximum=Math.max(...rows.map(r=>Number(modelMetricValue(r,metric))||0),0);
+  if(maximum===0)return 1;
+  const magnitude=10**Math.floor(Math.log10(maximum));
+  return [1,2,5,10].find(n=>n*magnitude>=maximum)*magnitude;
+}
 function renderModels() {
-  const rows=modelRows(), metric=$('#model-metric').value, ds=$('#model-dataset').value;
-  const isAll=ds==='all';
+  const rows=modelRows(), metric=$('#model-metric').value;
   $('#scope-note').textContent=scope==='formal'
-    ? 'All graded tasks per model. Cost normalization uses the current results; charts show unweighted dataset means.'
-    : 'Tasks with complete scores and costs for all four models. Normalization matches the routing evaluation.';
-  const chartRows=data.models.map(m=>({model:m.id, value:mean(rows.filter(r=>r.model===m.id).map(r=>r[metric])), count:rows.filter(r=>r.model===m.id).length}));
-  const max=Math.max(...chartRows.map(r=>r.value||0),metric==='accuracy'?1:0.000001);
-  const metricLabel=$('#model-metric').selectedOptions[0].textContent;
-  $('#model-chart').innerHTML=chartRows.map(r=>`<div class="model-stat"><div class="model-name"><span class="model-dot" style="background:${colors[r.model]}"></span>${esc(modelLabel(r.model))}</div><div class="model-value">${metric==='accuracy'?pct(r.value):metric.includes('tokens')?compact(r.value):f(r.value,4)}</div><div class="track" role="img" aria-label="${esc(modelLabel(r.model)+' '+metricLabel+' '+(r.value??'No data'))}"><span style="width:${Math.min(100,(r.value||0)/max*100)}%;background:${colors[r.model]}"></span></div><div class="model-sub">${isAll?`${r.count} datasets · unweighted mean`:esc(dsLabel(ds))}</div></div>`).join('');
+    ? 'All graded results · Shared chart scale across models'
+    : 'Common tasks for all four models · Frozen routing cost scale';
+  const max=modelScale(rows,metric), metricLabel=$('#model-metric').selectedOptions[0].textContent;
+  const showModels=data.models.filter(m=>rows.some(r=>r.model===m.id));
+  $('#model-chart').innerHTML=showModels.map(m=>{
+    const modelRows=rows.filter(r=>r.model===m.id);
+    const values=modelRows.map(r=>modelMetricValue(r,metric)).filter(valid).map(Number);
+    const aggregate=values.length?(metric==='raw_cost_usd'?values.reduce((a,b)=>a+b,0):mean(values)):null;
+    const partial=r=>metric.includes('tokens')?r.token_tasks<r.graded:metric!=='accuracy'&&r.cost_tasks<r.graded;
+    const aggregatePartial=modelRows.some(partial);
+    const prefix=metric==='raw_cost_usd'&&aggregatePartial?'≥ ':'';
+    const suffix=metric!=='raw_cost_usd'&&aggregatePartial?'†':'';
+    return `<article class="model-window" data-model="${esc(m.id)}" aria-labelledby="model-title-${esc(m.id)}">
+      <div class="model-window-heading"><span class="window-kicker">${esc(metricLabel)}</span><h3 id="model-title-${esc(m.id)}" title="${esc(m.model_id)}">${esc(m.label)}</h3></div>
+      <div class="dataset-axis" aria-hidden="true"><span></span><div><span>${formatModelMetric(0,metric,true)}</span><span>${formatModelMetric(max/2,metric,true)}</span><span>${formatModelMetric(max,metric,true)}</span></div><span></span></div>
+      <div class="dataset-bars">${modelRows.map(r=>{
+        const value=modelMetricValue(r,metric), hasValue=valid(value), incomplete=partial(r);
+        const lower=metric==='raw_cost_usd'&&incomplete;
+        const note=metric==='accuracy'?`${r.passed} passed / ${r.graded} graded`:metric.includes('tokens')?`${r.token_tasks}/${r.graded} complete usage records`:`${r.cost_tasks}/${r.graded} complete cost records`;
+        const display=(hasValue&&lower?'≥ ':'')+formatModelMetric(value,metric)+(hasValue&&incomplete&&!lower?'†':'');
+        const title=`${dsLabel(r.dataset)}: ${display}. ${note}${metric.includes('tokens')&&hasValue?'. '+integer(value)+' tokens per task':''}`;
+        return `<div class="dataset-bar-row" data-dataset="${esc(r.dataset)}" title="${esc(title)}"><span class="dataset-label">${esc(dsLabel(r.dataset))}</span><div class="dataset-track ${hasValue?'':'missing'}" role="img" aria-label="${esc(title)}"><span style="width:${hasValue?Math.max(0,Math.min(100,Number(value)/max*100)):0}%;background:${colors[m.id]}"></span></div><span class="dataset-value">${display}</span></div>`;
+      }).join('')}</div>
+      <div class="model-window-footer"><span>${modelRows.length} datasets · ${integer(sum(modelRows,'graded'))} graded</span><span>${metric==='raw_cost_usd'?'Total':'Dataset mean'} <strong>${prefix}${formatModelMetric(aggregate,metric)}${suffix}</strong></span></div>
+    </article>`;
+  }).join('')||'<div class="empty">No matching results.</div>';
   $('#model-table-caption').textContent=`${rows.length} rows · ${scope==='formal'?'All results':'Routing cohort'}`;
   $('#model-table tbody').innerHTML=order(rows,modelSort).map(r=>{
     const partial=r.cost_tasks<r.graded, tokenPartial=r.token_tasks<r.graded;

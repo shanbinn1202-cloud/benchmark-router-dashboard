@@ -5,9 +5,9 @@
   <meta name="theme-color" content="#f5f3ee">
   <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Macro-F1.">
   <title>Benchmark Router — Results</title>
-  <link rel="icon" href="assets/icon.svg?v=20261103-en" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=20261103-en">
-  <script src="assets/app.js?v=20261103-en" defer></script>
+  <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css?v=20261103-cards">
+  <script src="assets/app.js?v=20261103-cards" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -28,16 +28,15 @@
 
   <section id="models" class="section">
     <div class="section-heading"><h2><span class="section-number">01</span> Model performance</h2><a class="download" href="assets/models.csv" download>Model CSV ↓</a></div>
-    <div class="toolbar"><div class="segmented" role="group" aria-label="Evaluation sample"><button data-scope="formal" class="selected" aria-pressed="true">All results</button><button data-scope="cohort" aria-pressed="false">Routing cohort</button></div><div class="filters"><label class="sr-only" for="model-dataset">Model dataset</label><select id="model-dataset"></select><label class="sr-only" for="model-metric">Chart metric</label><select id="model-metric"><option value="accuracy">Accuracy</option><option value="normalized_cost_mean">Mean normalized cost</option><option value="mean_total_tokens">Mean total tokens</option><option value="mean_output_tokens">Mean output tokens</option></select></div></div>
-    <p class="scope-note" id="scope-note"></p>
-    <div class="model-chart" id="model-chart" aria-label="Model comparison"></div>
-    <div class="panel">
-      <div class="table-top"><span id="model-table-caption"></span><input id="model-search" type="search" placeholder="Search model or dataset" aria-label="Search model or dataset"></div>
+    <div class="toolbar"><div class="segmented" role="group" aria-label="Evaluation sample"><button data-scope="formal" class="selected" aria-pressed="true">All results</button><button data-scope="cohort" aria-pressed="false">Routing cohort</button></div><div class="filters"><label class="sr-only" for="model-dataset">Model dataset</label><select id="model-dataset"></select><label class="sr-only" for="model-metric">Chart metric</label><select id="model-metric"><option value="accuracy">Accuracy</option><option value="raw_cost_usd">Total cost (USD)</option><option value="mean_cost_usd">Mean cost (USD / task)</option><option value="normalized_cost_mean">Mean normalized cost</option><option value="mean_input_tokens">Mean input tokens</option><option value="mean_output_tokens">Mean output tokens</option><option value="mean_total_tokens">Mean total tokens</option></select></div></div>
+    <div class="model-controls"><p class="scope-note" id="scope-note"></p><input id="model-search" type="search" placeholder="Search model or dataset" aria-label="Search model or dataset"></div>
+    <div class="model-chart" id="model-chart" aria-label="Results by model"></div>
+    <details class="model-details panel" id="model-details"><summary>Full data table <span id="model-table-caption"></span></summary>
       <div class="table-wrap" tabindex="0" role="region" aria-label="Model statistics"><table id="model-table"><caption class="sr-only">Accuracy, cost and mean tokens by dataset and model</caption><thead><tr>
         <th>Dataset / Model</th><th class="num sortable" data-model-sort="accuracy" tabindex="0" role="button">Accuracy ↕</th><th class="num">Pass / Graded</th><th class="num sortable" data-model-sort="raw_cost_usd" tabindex="0" role="button">Cost, USD ↕</th><th class="num">USD / task</th><th class="num sortable" data-model-sort="normalized_cost_mean" tabindex="0" role="button">Norm. cost / task ↕</th><th class="num">Input / task</th><th class="num">Output / task</th><th class="num sortable" data-model-sort="mean_total_tokens" tabindex="0" role="button">Tokens / task ↕</th>
       </tr></thead><tbody></tbody></table></div>
-    </div>
-    <p class="footnote">Tokens are summed across calls within each task. Partial records show coverage; — indicates unavailable data.</p>
+    </details>
+    <p class="footnote">† Partial coverage · ≥ Known cost only · — Unavailable. Tokens are cumulative per task.</p>
   </section>
 
   <section id="routing" class="section">

@@ -5,6 +5,9 @@ test('English results, scopes, filters, sorting and exports',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');
   await expect(page.locator('#model-table tbody tr')).toHaveCount(rowsFor('formal').length);
+  await expect(page.locator('.model-window')).toHaveCount(4);
+  await expect(page.locator('.dataset-bar-row')).toHaveCount(rowsFor('formal').length);
+  await page.locator('#model-details summary').click();
   await expect(page.locator('#efficiency-chart .bar-row')).toHaveCount(4);
   await expect(page.locator('#routing-table tbody tr')).toHaveCount(data.routing.metrics.length);
   await expect(page.locator('#error')).toBeHidden();
@@ -42,6 +45,8 @@ test('English results, scopes, filters, sorting and exports',async({page})=>{
   expect(width.scroll).toBeLessThanOrEqual(width.view+1);
   expect(errors).toEqual([]);
   await page.locator('[data-scope=formal]').click();await page.locator('#model-dataset').selectOption('all');await page.locator('#model-metric').selectOption('accuracy');
+  await page.locator('#model-details summary').click();
+  await page.locator('#models').screenshot({path:`test-results/model-cards-${test.info().project.name}.png`});
   await page.evaluate(()=>{document.activeElement?.blur();document.querySelectorAll('.table-wrap').forEach(el=>el.scrollLeft=0);window.scrollTo({top:0,behavior:'instant'});});
   await page.screenshot({path:`test-results/dashboard-${test.info().project.name}.png`,fullPage:true});
 });
@@ -50,4 +55,34 @@ test('network errors are visible and recoverable',async({page})=>{
   await page.goto('/');await expect(page.locator('#error')).toBeVisible();
   await page.unroute('**/assets/data.json*');await page.locator('#refresh').click();
   await expect(page.locator('#error')).toBeHidden();await expect(page.locator('#model-table tbody tr')).toHaveCount(rowsFor('formal').length);
+});
+
+test('model windows share scales and retain costs, tokens and coverage',async({page})=>{
+  await page.goto('/');
+  await expect(page.locator('.model-window')).toHaveCount(4);
+  const positions=await page.locator('.model-window').evaluateAll(cards=>cards.map(el=>({x:el.offsetLeft,y:el.offsetTop})));
+  if(test.info().project.name==='desktop')expect(positions[0].y).toBe(positions[1].y);
+  else expect(positions[0].x).toBe(positions[1].x);
+  for(const metric of ['accuracy','raw_cost_usd','mean_cost_usd','normalized_cost_mean','mean_input_tokens','mean_output_tokens','mean_total_tokens']){
+    await page.locator('#model-metric').selectOption(metric);
+    const axes=await page.locator('.dataset-axis').allTextContents();
+    expect(new Set(axes).size).toBe(1);
+    for(const model of data.models){
+      const r=rowsFor('formal').find(r=>r.model===model.id&&r.dataset==='science');
+      const row=page.locator(`.model-window[data-model="${model.id}"] .dataset-bar-row[data-dataset="science"]`);
+      const value=metric==='raw_cost_usd'&&r.cost_tasks<r.graded?r.known_cost_usd:r[metric];
+      const expected=await page.evaluate(([v,k])=>formatModelMetric(v,k),[value,metric]);
+      await expect(row.locator('.dataset-value')).toContainText(expected);
+      if(metric.includes('tokens')&&r.token_tasks<r.graded)await expect(row.locator('.dataset-value')).toContainText('†');
+      if(metric==='raw_cost_usd'&&r.cost_tasks<r.graded)await expect(row.locator('.dataset-value')).toContainText('≥');
+      if(metric==='accuracy'){
+        const width=await row.locator('.dataset-track>span').evaluate(el=>parseFloat(el.style.width));
+        expect(width).toBeCloseTo(Number(value)*100,3);
+      }
+    }
+  }
+  await page.locator('#model-search').fill('qwen');
+  await expect(page.locator('.model-window')).toHaveCount(1);
+  await page.locator('#model-search').fill('nonexistent-dataset');
+  await expect(page.locator('#model-chart')).toContainText('No matching results');
 });
