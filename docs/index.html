@@ -6,8 +6,8 @@
   <meta name="description" content="Model and routing benchmark results: accuracy, cost, token usage, Perf/Cost and Macro-F1.">
   <title>Coding Routing Benchmark — Results</title>
   <link rel="icon" href="assets/icon.svg?v=20261103-cards" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=20261103-fold-tables">
-  <script src="assets/app.js?v=20261103-fold-tables" defer></script>
+  <link rel="stylesheet" href="assets/style.css?v=20261103-independent-tables">
+  <script src="assets/app.js?v=20261103-independent-tables" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
@@ -23,9 +23,7 @@
     <div class="section-heading"><h2><span class="section-number">01</span> Model performance</h2></div>
     <div class="toolbar"><span class="scope-note" id="scope-note"></span><div class="filters"><label class="sr-only" for="model-metric">Chart metric</label><select id="model-metric"><option value="accuracy">Accuracy</option><option value="raw_cost_usd">Total cost (USD)</option><option value="mean_cost_usd">Mean cost (USD / task)</option><option value="normalized_cost_mean">Mean normalized cost</option><option value="mean_input_tokens">Mean input tokens</option><option value="mean_output_tokens">Mean output tokens</option><option value="mean_total_tokens">Mean total tokens</option></select></div></div>
     <div class="model-chart" id="model-chart" aria-label="Results by model"></div>
-    <details class="model-details panel" id="model-details"><summary>Full data table <span id="model-table-caption"></span></summary>
-      <div id="model-tables"></div>
-    </details>
+    <div id="model-tables"></div>
     <p class="footnote">† Partial coverage · ≥ Known cost only · — Unavailable. Tokens are cumulative per task.</p>
   </section>
 
@@ -52,8 +50,8 @@
       <div class="panel chart-panel"><div class="chart-heading"><h3>Perf / Cost</h3><span>Higher is better</span></div><div id="efficiency-chart" class="bar-chart"></div></div>
       <div class="panel chart-panel"><div class="chart-heading"><h3>Macro-F1</h3><span>Higher is better</span></div><div id="f1-chart" class="bar-chart"></div></div>
     </div>
-    <div id="routing-tables" class="routing-tables"></div>
     <div class="panel selection-panel"><div class="chart-heading"><h3>Model selection</h3><div class="legend" id="legend"></div></div><div id="selection-chart"></div></div>
+    <div id="routing-tables" class="routing-tables"></div>
   </section>
 
   <footer><span>Coding Routing Benchmark</span><span id="footer-time"></span></footer>

@@ -7,7 +7,12 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   await expect(page.locator('#model-tables tbody tr')).toHaveCount(rowsFor('formal').length);
   await expect(page.locator('.model-window')).toHaveCount(4);
   await expect(page.locator('.dataset-bar-row')).toHaveCount(rowsFor('formal').length);
-  await page.locator('#model-details summary').click();
+  for(const panel of await page.locator('.model-dataset-panel').all()){
+    await expect(panel.locator('table')).toBeHidden();
+    await panel.locator('summary').click();
+    await expect(panel.locator('table')).toBeVisible();
+  }
+  expect(await page.locator('.selection-panel').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('#routing-tables')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBeTruthy();
   await expect(page.locator('#efficiency-chart .bar-row')).toHaveCount(4);
   await expect(page.locator('#routing-tables tbody tr')).toHaveCount(data.routing.metrics.length);
   await expect(page.locator('#error')).toBeHidden();
@@ -23,6 +28,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   await page.locator('[data-model-sort=accuracy]').first().click();
   await expect(page.locator('.model-dataset-panel')).toHaveCount(data.datasets.length);
   for(const panel of await page.locator('.model-dataset-panel').all()){
+    await expect(panel.locator('table')).toBeVisible();
     await expect(panel.locator('tbody tr')).toHaveCount(4);
     const accuracy=await panel.locator('tbody td:nth-child(2)').allTextContents();
     expect(parseFloat(accuracy[0])).toBeGreaterThanOrEqual(parseFloat(accuracy.at(-1)));
@@ -62,7 +68,7 @@ test('English results, simplified layout, routing tables and metrics',async({pag
   expect(width.scroll).toBeLessThanOrEqual(width.view+1);
   expect(errors).toEqual([]);
   await page.locator('#model-metric').selectOption('accuracy');
-  await page.locator('#model-details summary').click();
+  for(const summary of await page.locator('.model-dataset-panel summary').all())await summary.click();
   await page.locator('#models').screenshot({path:`test-results/model-cards-${test.info().project.name}.png`});
   await page.evaluate(()=>{document.activeElement?.blur();document.querySelectorAll('.table-wrap').forEach(el=>el.scrollLeft=0);window.scrollTo({top:0,behavior:'instant'});});
   await page.screenshot({path:`test-results/dashboard-${test.info().project.name}.png`,fullPage:true});

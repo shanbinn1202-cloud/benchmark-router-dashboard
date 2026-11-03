@@ -8,6 +8,7 @@ const methodColors = {'Random':'#949084','KNN':'#346689','Zero-shot LLM':'#ae7b2
 const methods = Object.keys(methodColors);
 let data, modelSort=null, routeSort=null;
 const expandedRoutingDatasets=new Set();
+const expandedModelDatasets=new Set();
 const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const valid = v => v !== null && v !== undefined && v !== '' && Number.isFinite(Number(v));
 const f = (v,d=2) => valid(v) ? Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}) : '—';
@@ -100,7 +101,6 @@ function renderModels() {
       <div class="model-window-footer"><span>${modelRows.length} datasets · ${integer(sum(modelRows,'graded'))} graded</span><span>${metric==='raw_cost_usd'?'Total':'Dataset mean'} <strong>${prefix}${formatModelMetric(aggregate,metric)}${suffix}</strong></span></div>
     </article>`;
   }).join('')||'<div class="empty">No matching results.</div>';
-  $('#model-table-caption').textContent=`${rows.length} rows · All results`;
   const renderRow=r=>{
     const partial=r.cost_tasks<r.graded, tokenPartial=r.token_tasks<r.graded;
     const costNote=partial?`<span class="coverage">Complete: ${r.cost_tasks}/${r.graded}</span>`:'';
@@ -109,10 +109,14 @@ function renderModels() {
   };
   $('#model-tables').innerHTML=datasetOrder.filter(id=>rows.some(r=>r.dataset===id)).map(id=>{
     const datasetRows=order(rows.filter(r=>r.dataset===id),modelSort);
-    return `<article class="panel model-dataset-panel" data-dataset="${esc(id)}"><div class="table-top"><h3>${esc(dsLabel(id))}</h3><span>${datasetRows.length} models</span></div><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(dsLabel(id))} model statistics"><table><caption class="sr-only">${esc(dsLabel(id))} model results</caption><thead><tr>
+    return `<details class="panel model-dataset-panel" data-dataset="${esc(id)}"${expandedModelDatasets.has(id)?' open':''}><summary class="table-top"><h3>${esc(dsLabel(id))}</h3><span>${datasetRows.length} models</span></summary><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(dsLabel(id))} model statistics"><table><caption class="sr-only">${esc(dsLabel(id))} model results</caption><thead><tr>
         <th>Model</th><th class="num sortable" data-model-sort="accuracy" tabindex="0" role="button">Accuracy ↕</th><th class="num">Pass / Graded</th><th class="num sortable" data-model-sort="raw_cost_usd" tabindex="0" role="button">Cost, USD ↕</th><th class="num">USD / task</th><th class="num sortable" data-model-sort="normalized_cost_mean" tabindex="0" role="button">Norm. cost / task ↕</th><th class="num">Input / task</th><th class="num">Output / task</th><th class="num sortable" data-model-sort="mean_total_tokens" tabindex="0" role="button">Tokens / task ↕</th>
-      </tr></thead><tbody>${datasetRows.map(renderRow).join('')}</tbody></table></div></article>`;
+      </tr></thead><tbody>${datasetRows.map(renderRow).join('')}</tbody></table></div></details>`;
   }).join('');
+  $$('.model-dataset-panel').forEach(panel=>panel.addEventListener('toggle',()=>{
+    if(panel.open)expandedModelDatasets.add(panel.dataset.dataset);
+    else expandedModelDatasets.delete(panel.dataset.dataset);
+  }));
   bindSort('[data-model-sort]','modelSort',()=>modelSort,v=>modelSort=v,renderModels);
 }
 
