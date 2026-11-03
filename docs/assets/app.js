@@ -21,7 +21,7 @@ function formatTime(value) {return new Intl.DateTimeFormat('en-GB',{timeZone:'As
 
 function options() {
   const oldRoute=$('#routing-dataset').value;
-  $('#routing-dataset').innerHTML='<option value="all">Dataset mean (unweighted)</option>'+data.datasets.filter(d=>data.routing.coverage[d.id]).map(d=>`<option value="${esc(d.id)}">${esc(d.label)}</option>`).join('');
+  $('#routing-dataset').innerHTML='<option value="all">'+(data.routing.aggregation_version==='raw_usd_range_weighted_v1'?'All datasets (weighted Perf/Cost)':'Dataset mean (unweighted)')+'</option>'+data.datasets.filter(d=>data.routing.coverage[d.id]).map(d=>`<option value="${esc(d.id)}">${esc(d.label)}</option>`).join('');
   if([...$('#routing-dataset').options].some(o=>o.value===oldRoute))$('#routing-dataset').value=oldRoute;
 }
 
