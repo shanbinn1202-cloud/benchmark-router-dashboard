@@ -222,7 +222,7 @@ def raw_cost_metric(row):
     return row
 
 
-def routing_data(stage, summary):
+def routing_data(stage, summary, cohort=None):
     metrics = [{k: r.get(k) for k in ('method','dataset','tasks','passed','performance','perf_per_cost',
         'perf_per_cost_status','macro_f1','micro_f1','weighted_f1','raw_backend_cost_usd',
         'raw_router_cost_usd','raw_total_cost_usd','metric_cost')} for r in summary['dataset_metrics']]
@@ -237,16 +237,38 @@ def routing_data(stage, summary):
             'mean_perf_per_cost_status': status,
             'cost_basis': 'raw_total_usd_per_task'})
     aggregation = summary.get('aggregation_version', 'raw_usd_unweighted')
-    if aggregation == 'raw_usd_range_weighted_v1':
-        means = summary['dataset_arithmetic_means']
-        for mean in means:
-            rows = [r for r in metrics if r['method'] == mean['method']]
-            weights = mean['dataset_weights']
-            if abs(sum(float(w) for w in weights.values()) - 1) > 1e-12:
-                raise ValueError('Invalid dataset weights')
-            expected = sum(r['perf_per_cost'] * float(weights[r['dataset']]) for r in rows)
-            if abs(expected - mean['mean_perf_per_cost']) > max(1e-10, abs(expected)*1e-12):
-                raise ValueError('Weighted routing score does not match raw costs')
+    dataset_mean_costs = {}
+    if aggregation in ('raw_usd_range_weighted_v1','raw_usd_inverse_mean_weighted_v1'):
+        module = load_module('dashboard_cost_aggregation', BASE/'all_datasets/cost_aggregation.py')
+        if cohort is None: cohort = lines(stage/'cohort/tasks.jsonl')
+        means, dataset_mean_costs = module.aggregate(metrics, cohort)
+        aggregation = module.VERSION
+        # Reporting artifact is separate from routing policy/receipts, so metric
+        # changes never invalidate or repeat paid decisions.
+        report = {'aggregation_version':aggregation,'dataset_means':means,
+                  'dataset_mean_trajectory_cost_usd':dataset_mean_costs,
+                  'tasks_sha256':summary['snapshot_sha256']}
+        (stage/'inverse_mean_cost_report.json').write_text(json.dumps(report,indent=2)+'\n')
+        final_path = stage/'summary.json'
+        if final_path.exists():
+            original = read(final_path)
+            if original.get('aggregation_version') != aggregation:
+                archive = stage/'summary-before-inverse-mean.json'
+                if not archive.exists(): archive.write_bytes(final_path.read_bytes())
+            original.update(aggregation_version=aggregation, dataset_arithmetic_means=means,
+                dataset_mean_trajectory_cost_usd=dataset_mean_costs,
+                dataset_weight_formula='w_d = 1 / (D * mean_{all task-model trajectories}(solver USD))',
+                mean_formula='sum_d w_d * (completion_rate_d / mean_raw_total_USD_d)',
+                weight_note='Weights are used directly, without renormalization. No division by sum of weights.',
+                reporting_module_sha256=hashlib.sha256((BASE/'all_datasets/cost_aggregation.py').read_bytes()).hexdigest())
+            temporary = final_path.with_suffix('.reporting.tmp')
+            temporary.write_text(json.dumps(original,indent=2)+'\n'); temporary.replace(final_path)
+        random_path=stage/'random/summary.json'
+        if random_path.exists():
+            random_summary=read(random_path)
+            random_summary['mean']=next(m for m in means if m['method']=='Random')
+            random_summary['aggregation_version']=aggregation
+            random_path.write_text(json.dumps(random_summary,indent=2)+'\n')
     choices = []
     combined = stage / 'routes.jsonl'
     if combined.exists():
@@ -271,8 +293,9 @@ def routing_data(stage, summary):
             'metrics': metrics, 'means': means, 'choices': choices,
             'aggregation_version': aggregation,
             'agent_workers': summary.get('agent_workers',256),
+            'dataset_mean_trajectory_cost_usd': dataset_mean_costs,
             'dataset_weights': means[0].get('dataset_weights', {}) if means else {},
-            'snapshot_sha256': summary['snapshot_sha256'], 'method_version': 'raw_usd_range_weighted_v1' if aggregation == 'raw_usd_range_weighted_v1' else 'github_aligned',
+            'snapshot_sha256': summary['snapshot_sha256'], 'method_version': aggregation if aggregation in ('raw_usd_range_weighted_v1','raw_usd_inverse_mean_weighted_v1') else 'github_aligned',
             'includes_terminal': 'terminal' in summary['coverage']}
 
 
@@ -348,7 +371,7 @@ def build():
             matched.append({**c, **tokens})
     all_rows, all_scales = summarize(all_cells,'formal')
     cohort_rows, cohort_scales = summarize(matched,'cohort',manifest['cost_normalization'])
-    routed = routing_data(stage, summary)
+    routed = routing_data(stage, summary, cohort)
     catalog = read(BASE/'routing_common/model_catalog.json')
     payload = {'schema_version':1,'updated_at':datetime.now(timezone.utc).isoformat(),
         'models':[{'id':m,'label':label,'model_id':catalog[m]['name']} for m,label in NAMES.items()],
@@ -362,7 +385,7 @@ def build():
             'cost':'Selected-attempt USD costs. Unavailable bills use recorded tokens at frozen provider rates, explicitly marked as simulated in the CSV. Unmeasured retry charges are excluded from simulation. Original answers and scores are retained.',
             'normalization':'c′ = (c − min) / (max − min), fitted per dataset across task × model costs; constant costs map to 0. All results and the routing cohort use separate scales. Tables report per-task means.',
             'tokens':'Recorded tokens per task, including partial trajectories, repeated inputs and verified retry usage. For interrupted Terminal-Bench requests, input is reconstructed with the model tokenizer and output uses only saved token counts, as authorized by the user. Unavailable output is excluded, not estimated. For simulated cost repairs, unmeasured retries are excluded. No missing token counts are inferred.',
-            'routing': ('Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = range_d / sum_j range_j and range_d = max solver cost - min solver cost over all task-model cells in dataset d. Macro-F1 is an unweighted dataset mean.' if routed['aggregation_version'] == 'raw_usd_range_weighted_v1' else 'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.'),
+            'routing': ('Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Overall Perf/Cost = sum_d w_d * Perf/Cost_d, where w_d = 1 / (D * mean trajectory cost_d). The mean uses all eligible tasks and all four candidate-model solver costs; router fees are excluded from weight fitting. Weights are not renormalized to sum to one. Macro-F1 is an unweighted dataset mean.' if routed['aggregation_version'] == 'raw_usd_inverse_mean_weighted_v1' else 'Perf/Cost = completion rate / mean raw total USD cost per task, including solver and router calls. Macro-F1 uses four fixed labels. Overall metrics are unweighted means across datasets.'),
             'labels':'The cheapest correct model; if all models fail, the cheapest model. Ties use model-alias lexicographic order.',
             'methods':'KNN: pooled datasets, global grouped five-fold evaluation. Zero-shot and Agent: GitHub-adapted implementations. Agent uses training-fold memory and delayed selected-model feedback.',
             'comparison':'Agent harnesses, context limits and providers vary across runs. Agent includes evaluation feedback; results compare the configured pipelines, not a strict paper reproduction.'}}

@@ -55,6 +55,18 @@ class StatisticsTests(unittest.TestCase):
             self.assertIsNone(result['perf_per_cost'])
             self.assertEqual(result['perf_per_cost_status'],status)
 
+    def test_inverse_mean_weights_are_not_renormalized(self):
+        module=exporter.load_module('test_cost_aggregation',exporter.BASE/'all_datasets/cost_aggregation.py')
+        tasks=[{'dataset':ds,'outcomes':{m:{'cost_usd':str(cost)} for m in ('qwen','gemma','muse','deepseek')}} for ds,cost in [('a',2),('b',8)]]
+        rows=[{'method':'Random','dataset':ds,'perf_per_cost':score,'perf_per_cost_status':'finite','macro_f1':f1} for ds,score,f1 in [('a',10,.2),('b',20,.6)]]
+        means,averages=module.aggregate(rows,tasks)
+        self.assertEqual(means[0]['dataset_weights'],{'a':'0.25','b':'0.0625'})
+        self.assertEqual(means[0]['mean_perf_per_cost'],3.75)
+        self.assertAlmostEqual(means[0]['mean_macro_f1'],.4)
+        self.assertEqual(averages,{'a':'2','b':'8'})
+        tasks[0]['outcomes']={m:{'cost_usd':'0'} for m in tasks[0]['outcomes']}
+        with self.assertRaises(ValueError):module.aggregate(rows,tasks)
+
     def test_published_means_and_selection_counts_match_source(self):
         d=json.loads((ROOT/'docs/assets/data.json').read_text())
         for row in d['routing']['metrics']:
