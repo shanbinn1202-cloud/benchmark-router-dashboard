@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T22:11:51.901636+00:00",
+  "updated_at": "2026-11-05T15:21:34.317334+00:00",
   "models": [
     {
       "id": "qwen",
@@ -2132,7 +2132,7 @@
   "routing": {
     "method_status": [],
     "tasks": 2223,
-    "finished": 1793743637.4318426,
+    "finished": 1793891811.3215864,
     "coverage": {
       "aethercode": {
         "planned": 400,
